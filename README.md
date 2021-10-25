@@ -1,24 +1,20 @@
-# README
+# Backend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Commencer 🏁
+### Pré-requis
+- [Docker engine](https://docs.docker.com/engine/install/) : *20.10.**
+- [Docker compose](https://docs.docker.com/compose/install/) 
+  - *NOTE: docker compose est inclus dans les installation de l'engine sur Windows et MacOS*.
 
-Things you may want to cover:
+### nstallation
+1. Cloner le répository
+```bash
+git clone https://github.com/Note-thing/backend && cd backend
+```
 
-* Ruby version
+2. Lancer le conteneur Docker 
+```bash
+docker-compose up
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+3. Allez à l'adresse [localhost:3001](http://localhost:3001/) et vous voilà prêt à contribuer 😎. 
