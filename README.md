@@ -6,7 +6,7 @@
 - [Docker compose](https://docs.docker.com/compose/install/) 
   - *NOTE: docker compose est inclus dans les installation de l'engine sur Windows et MacOS*.
 
-### nstallation
+### Installation
 1. Cloner le répository
 ```bash
 git clone https://github.com/Note-thing/backend && cd backend
