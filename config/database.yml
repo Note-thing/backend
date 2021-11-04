@@ -12,6 +12,8 @@ development:
 
 test:
   <<: *default
+  database: app_ci 
+  host: 127.0.0.1
 
 production:
   <<: *default
