@@ -7,16 +7,17 @@ jobs:
     services: 
       db:
         image: mysql:5.7
-        ports: ['3307:3306']
-        env: 
+        nv:
           MYSQL_HOST: 127.0.0.1
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: app_ci
-          MYSQL_USER: user
-          MYSQL_PASSWORD: password
+          MYSQL_DB: app_ci
+          MYSQL_USER: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_PASSWORD:
+        ports:
+          - "3306:3306"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - name: Setup Ruby 2.7
         uses: actions/setup-ruby@v1
         with: 
@@ -27,12 +28,14 @@ jobs:
       - name: Run tests
         env: 
           RAILS_ENV: test
-          DATABASE_PORT: 3307
+          DATABASE_PORT: 3306
+
         run: | 
-          cd bin
-          rails db:create
-          rails db:schema:load
-          rails test
+          gem install bundler
+          bundle install 
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          bundle exec rails test
 
           
           
