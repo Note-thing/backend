@@ -33,7 +33,7 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/:id
+  # DELETE /api/v1/notes/:id
   def destroy
     @note = Note.find(params[:id])
     if @note
