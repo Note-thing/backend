@@ -7,11 +7,14 @@ jobs:
     services: 
       db:
         image: mysql:5.7
-        env:
+        nv:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_DB: app_ci
           MYSQL_USER: root
-          MYSQL_ROOT_PASSWORD: password
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_PASSWORD:
         ports:
-          - 3306
+          - "3306:3306"
 
     steps:
       - uses: actions/checkout@v2
