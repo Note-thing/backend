@@ -7,13 +7,14 @@ jobs:
     services: 
       db:
         image: mysql:5.7
-        ports: ['3307:3306']
+        ports: ['3306:3306']
         env: 
           MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: app_ci
-          MYSQL_USER: user
-          MYSQL_PASSWORD: password
+          MYSQL_USER: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_PASSWORD:
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
       - name: Run tests
         env: 
           RAILS_ENV: test
-          DATABASE_PORT: 3307
+          DATABASE_PORT: 3306
         run: | 
           gem install bundler
           bundle install 
