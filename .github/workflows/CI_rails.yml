@@ -16,10 +16,10 @@ jobs:
           MYSQL_PASSWORD: password
 
     steps:
-      - name: Setup Ruby 2.5.1
+      - name: Setup Ruby 2.7.4
         uses: actions/setup-ruby@v1
         with: 
-          ruby-version: 2.5.1
+          ruby-version: 2.7.4
           bundler: default
           bundler-cache: true
 
