@@ -16,6 +16,7 @@ jobs:
           MYSQL_PASSWORD: password
 
     steps:
+      - uses: actions/checkout@v4
       - name: Setup Ruby 2.7
         uses: actions/setup-ruby@v1
         with: 
@@ -28,9 +29,10 @@ jobs:
           RAILS_ENV: test
           DATABASE_PORT: 3307
         run: | 
-          bin/rails db:create
-          bin/rails db:schema:load
-          bin/rails test
+          cd bin
+          rails db:create
+          rails db:schema:load
+          rails test
 
           
           
