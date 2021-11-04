@@ -16,7 +16,9 @@ jobs:
           MYSQL_PASSWORD: password
 
     steps:
+      - uses: actions/checkout@v2
       - name: Setup Ruby 2.5.1
+        uses: ruby/setup-ruby@v1
         with: 
           ruby-version: 2.5.1
           bundler: default
