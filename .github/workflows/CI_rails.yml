@@ -10,11 +10,9 @@ jobs:
         ports: ['3306:3306']
         env: 
           MYSQL_HOST: 127.0.0.1
-          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: app_ci
           MYSQL_USER: root
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_PASSWORD:
+          MYSQL_PASSWORD: password
 
     steps:
       - uses: actions/checkout@v2
