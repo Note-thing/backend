@@ -1,0 +1,35 @@
+name: ci rails
+on: [push, pull_request]
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    
+    services: 
+      db:
+        image: mysql:5.7
+        ports: ['3307:3306']
+        env: 
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: app_ci
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+
+    steps:
+      - name: Setup Ruby 2.5.1
+        with: 
+          ruby-version: 2.5.1
+          bundler: default
+          bundler-cache: true
+
+      - name: Run tests
+        env: 
+          RAILS_ENV: test
+          DATABASE_PORT: 3307
+        run: | 
+          bin/rails db:create
+          bin/rails db:schema:load
+          bin/rails test
+
+          
+          
