@@ -28,9 +28,10 @@ jobs:
           RAILS_ENV: test
           DATABASE_PORT: 3307
         run: | 
-          bin/rails db:create
-          bin/rails db:schema:load
-          bin/rails test
+          cd bin
+          rails db:create
+          rails db:schema:load
+          rails test
 
           
           
