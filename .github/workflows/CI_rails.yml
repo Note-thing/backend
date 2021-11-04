@@ -1,40 +1,53 @@
 name: ci rails
-on: [push, pull_request]
-jobs: 
-  build:
+on:
+  pull_request:
+    branches: ['*']
+  push:
+    branches: [main, test]
+
+jobs:
+  test:
     runs-on: ubuntu-latest
-    
-    services: 
+
+    services:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: root 
-          MYSQL_USER: root
-          MYSQL_PASSWORD: root
+          MYSQL_DATABASE: app_ci
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
-          - "3306:3306"
-
+          - 3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Ruby 2.7
+      - name: Set up Ruby 2.7
         uses: actions/setup-ruby@v1
-        with: 
+        with:
           ruby-version: 2.7
-          bundler: default
-          bundler-cache: true
 
-      - name: Run tests
-        env: 
-          RAILS_ENV: test
-          DATABASE_PORT: 3306
-          DB_PASSWORD: root
-
-        run: | 
+      - name: Install dependencies
+        run: |
           gem install bundler
-          bundle install 
-          bundle exec rails db:create
-          bundle exec rails db:migrate
-          bundle exec rails test
+          bundle install --jobs 4 --retry 3
 
-          
-          
+      - name: Start MySql
+        run: |
+          sudo service mysql start
+
+      - name: Setup database and run tests
+        env:
+          RAILS_ENV: test
+          DB_PORT: 3306
+          DB_NAME: app_ci
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load
+          bin/rails test
+
