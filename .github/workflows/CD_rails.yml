@@ -29,7 +29,7 @@ jobs:
         with:
           ruby-version: 2.7.4
 
-      - name: Install dependencies
+      - name: Configure database with production env
         env:
           RAILS_ENV: production
           DB_PORT: 3307
@@ -61,7 +61,7 @@ jobs:
       - name: Copy app files to AWS
         run : rsync -rave "ssh -o StrictHostKeyChecking=no -i SSH.pem" ./ ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com:/home/ubuntu/backend
 
-      - name: Execute remove script for installation and running
+      - name: Execute remote script for installation and running
         uses: appleboy/ssh-action@master
         with:
           host: ec2-3-69-174-49.eu-central-1.compute.amazonaws.com
