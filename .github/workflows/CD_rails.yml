@@ -34,18 +34,17 @@ jobs:
           RAILS_ENV: production
           DB_PORT: 3307
           DB_NAME: app_cd
-          DB_USER: root
-          DB_PASSWORD: root
           DB_HOST: 127.0.0.1
           SECRET_KEY_BASE: ${{secrets.MASTER_KEY}}
         run: |
+          echo "" >> config/database.yml
           echo "production:" >> config/database.yml
           echo "  secret_key_base: ${{secrets.MASTER_KEY}}" >> config/database.yml
           echo "  adapter: mysql2" >> config/database.yml
           echo "  encoding: utf8" >> config/database.yml
           echo "  database: app_cd" >> config/database.yml
-          echo "  username: root" >> config/database.yml
-          echo "  password: root" >> config/database.yml
+          echo "  username: ${{secrets.DB_USERNAME}}" >> config/database.yml
+          echo "  password: ${{secrets.DB_PASSWORD}}" >> config/database.yml
           echo "  host: 127.0.0.1" >> config/database.yml
           echo "  port: 3307" >> config/database.yml
           echo "secret_key_base: ${{secrets.MASTER_KEY}}" >> config/database.yml
