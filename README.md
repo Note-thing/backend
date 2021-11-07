@@ -18,3 +18,8 @@ docker-compose up
 ```
 
 3. Allez à l'adresse [localhost:3001](http://localhost:3001/) et vous voilà prêt à contribuer 😎. 
+
+### Se connecter au container Docker
+```bash
+docker exec -it backend_app_1 /bin/bash
+```
