@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: ['*']
   push:
-    branches: [main, test]
+    branches: [main, deploy]
 
 jobs:
   test:
@@ -50,4 +50,3 @@ jobs:
           bin/rails db:create
           bin/rails db:schema:load
           bin/rails test
-

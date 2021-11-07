@@ -1,0 +1,73 @@
+# This is a basic workflow to help you get started with Actions
+
+name: cd rails
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ deploy ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    env:
+      CI: false # consider warning as error
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2 # NEEDED otherwise the files of the repo won't be here
+
+      - name: Set up Ruby 2.7.4
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7.4
+
+      - name: Install dependencies
+        env:
+          RAILS_ENV: production
+          DB_PORT: 3307
+          DB_NAME: app_cd
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_HOST: 127.0.0.1
+          SECRET_KEY_BASE: ${{secrets.MASTER_KEY}}
+        run: |
+          echo "production:" >> config/database.yml
+          echo "  secret_key_base: ${{secrets.MASTER_KEY}}" >> config/database.yml
+          echo "  adapter: mysql2" >> config/database.yml
+          echo "  encoding: utf8" >> config/database.yml
+          echo "  database: app_cd" >> config/database.yml
+          echo "  username: root" >> config/database.yml
+          echo "  password: root" >> config/database.yml
+          echo "  host: 127.0.0.1" >> config/database.yml
+          echo "  port: 3307" >> config/database.yml
+          echo "secret_key_base: ${{secrets.MASTER_KEY}}" >> config/database.yml
+
+      - name: Create SSH Key file
+        run: touch SSH.pem
+
+      - name: Write SSH key
+        run: echo "${{secrets.SSH}}" > SSH.pem
+
+      - name: Change permission
+        run: chmod 600 SSH.pem
+
+      - name: Copy app files to AWS
+        run : rsync -rave "ssh -o StrictHostKeyChecking=no -i SSH.pem" ./ ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com:/home/ubuntu/backend
+
+      - name: Execute remove script for installation and running
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-3-69-174-49.eu-central-1.compute.amazonaws.com
+          username: ubuntu
+          key: ${{secrets.SSH}}
+          script: |
+            chmod 777 script.sh
+            ./script.sh &
