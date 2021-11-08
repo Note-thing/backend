@@ -24,12 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # NEEDED otherwise the files of the repo won't be here
 
-      - name: Set up Ruby 2.7.4
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.7.4
-
-      - name: Configure database with production env
+      - name: Create config for production
         env:
           RAILS_ENV: production
           DB_PORT: 3307
@@ -68,5 +63,5 @@ jobs:
           username: ubuntu
           key: ${{secrets.SSH}}
           script: |
-            chmod 777 script.sh
-            ./script.sh &
+            chmod 777 backend/scripts/script.sh
+            ./backend/scripts/script.sh &
