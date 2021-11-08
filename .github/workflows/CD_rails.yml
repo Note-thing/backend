@@ -63,5 +63,6 @@ jobs:
           username: ubuntu
           key: ${{secrets.SSH}}
           script: |
+            chmod 777 backend/scripts/script.sh
             dos2unix backend/scripts/script.sh
             ./backend/scripts/script.sh &
