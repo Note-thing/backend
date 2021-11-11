@@ -3,6 +3,8 @@ source ~/.rvm/scripts/rvm
 
 rvm use 2.7.4
 
+kill -INT $(cat tmp/pids/server.pid)
+
 gem install bundler
 bundle install --jobs 4 --retry 3
 export SECRET_KEY_BASE=rake secret
