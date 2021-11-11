@@ -56,14 +56,7 @@ jobs:
       - name: Copy app files to AWS
         run : rsync -rave "ssh -o StrictHostKeyChecking=no -i SSH.pem" ./ ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com:/home/ubuntu/backend
 
-      - name: Execute remote script for installation and running
-        uses: appleboy/ssh-action@master
-        with:
-          host: ec2-3-69-174-49.eu-central-1.compute.amazonaws.com
-          username: ubuntu
-          key: ${{secrets.SSH}}
-          command_timeout: 1m
-          script: |
-            chmod 777 backend/scripts/script.sh
-            dos2unix backend/scripts/script.sh
-            ./backend/scripts/script.sh &
+
+      - name: Execute script on server
+        run: sudo ssh -o StrickHostKeyChecking=no -o T ubuntu@localhost -i "SSH.pem" "./script.sh &" 
+   
