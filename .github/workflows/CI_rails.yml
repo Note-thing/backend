@@ -1,9 +1,5 @@
 name: ci rails
-on:
-  pull_request:
-    branches: [deploy]
-  push:
-    branches: [main, deploy]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -49,4 +45,5 @@ jobs:
         run: |
           bin/rails db:create
           bin/rails db:schema:load
+          bin/rails db:migrate
           bin/rails test
