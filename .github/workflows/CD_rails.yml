@@ -58,5 +58,5 @@ jobs:
 
 
       - name: Execute script on server
-        run: sudo ssh -o StrictHostKeyChecking=no -T ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com:/home/ubuntu/backend -i "SSH.pem" "./script.sh &" 
+        run: sudo ssh -o StrictHostKeyChecking=no -T ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com -i "SSH.pem" "./script.sh &" 
    
