@@ -1,7 +1,7 @@
 name: ci rails
 on:
   pull_request:
-    branches: ['*']
+    branches: [deploy]
   push:
     branches: [main, deploy]
 
