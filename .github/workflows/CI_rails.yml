@@ -1,9 +1,5 @@
 name: ci rails
-on:
-  pull_request:
-    branches: [deploy]
-  push:
-    branches: [main, deploy]
+on: [push, pull_request]
 
 jobs:
   test:
