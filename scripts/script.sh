@@ -16,4 +16,4 @@ bin/rails db:create RAILS_ENV=production DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 bin/rails db:schema:load RAILS_ENV=production DISABLE_DATABASE_ENVIRONMENT_CHECK=1
 
 #rm -f tmp/pids/server.pid
-bin/rails server -e production -p 4000 --daemon
+bin/rails server -e production -p 4000 -d
