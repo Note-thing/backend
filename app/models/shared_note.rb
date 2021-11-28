@@ -1,0 +1,2 @@
+class SharedNote < ApplicationRecord
+end
