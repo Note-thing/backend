@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :notes
+      get 'shared_notes/copy/:uuid', to: 'shared_notes#copy'
+      resources :shared_notes, only: [:show, :create, :destroy]
       resources :test, only: [:index]
     end
   end
 end
-

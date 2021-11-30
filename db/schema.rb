@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 2021_11_28_161618) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "note_id"
+    t.string "uuid"
     t.index ["note_id"], name: "index_shared_notes_on_note_id"
   end
 
