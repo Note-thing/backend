@@ -33,22 +33,18 @@ class Api::V1::SharedNotesController < ApplicationController
       end
     end
 
-    # GET /api/v1/shared_notes/copy/:id
+    # GET /api/v1/shared_notes/copy/:uuid
     def copy
-        @sharedNote = SharedNote.find_by(uuid: :uuid)
-        @note = Note.new()
+        sharedNote = SharedNote.find_by(uuid: params[:uuid])
+        note = Note.new()
 
-        # TODO ne fonctionne pas ...
-        @note.title = @note.title
-        @note.body = @note.body
-        # @note.title = "Title"
-        # @note.body = "Body"
-        if @note.save
-            render json: @note
+        note.title = sharedNote.title
+        note.body = sharedNote.body
+        if note.save
+            render json: note
           else
-            render error: {error: 'Unable to copy the note'}, status: 400
+            render json: {error: 'Unable to copy the note', status: 400}, status: 400
           end
-
     end
   
     private
