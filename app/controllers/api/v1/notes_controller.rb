@@ -1,5 +1,7 @@
 class Api::V1::NotesController < ApplicationController
 
+  before_action :authentication
+
   # GET /api/v1/notes
   def index
     @notes = Note.all
