@@ -1,4 +1,7 @@
 class Api::V1::TagsController < ApplicationController
+
+  before_action :authentication
+
   def index
     @tags = Tag.all
     render json: @tags
