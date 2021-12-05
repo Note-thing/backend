@@ -5,6 +5,8 @@ Rails.application.routes.draw do
       post '/notes/tag', to: 'notes#addtag'
       resources :notes
       resources :test, only: [:index]
+      resources :folders, only: [:create, :update, :destroy]
+      get '/folders/:user_id', to: 'folders#get'
 
       post '/login', to: 'authentications#login'
       post '/signup', to: 'authentications#signup'
