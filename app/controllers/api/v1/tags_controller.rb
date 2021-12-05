@@ -13,9 +13,18 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def create
-    @tag = Tag.new(tag_params)
-    if @tag.save
-      render json: @tag
+    note = Note.find(params[:note_id])
+
+    unless note
+      render error: {error: 'Note not found'}, status: :not_found
+      return
+    end
+
+    tag = Tag.new(tag_params)
+
+    if tag.save
+      tag.note_tags.create({note_id: note.id})
+      render json: tag
     else
       render error: {error: 'Impossible de créer un tag'}, status: 400
     end
@@ -33,6 +42,7 @@ class Api::V1::TagsController < ApplicationController
 
   def destroy
     @tag = Tag.find(params[:id])
+    # TODO: retirer tous les éléments de note_tags
     if @tag
       @tag.destroy
       render json: {message: "Tag supprimé"}, status: 200
