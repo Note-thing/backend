@@ -11,7 +11,8 @@ end
 class Note < ApplicationRecord
 
   belongs_to :folder
-  has_many :tags, through: :notes_tags
+  has_many :note_tags
+  has_many :tags, through: :note_tags
   has_many :shared_notes
 
   validates :title, :body, presence: true

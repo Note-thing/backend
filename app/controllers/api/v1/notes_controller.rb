@@ -2,10 +2,18 @@ class Api::V1::NotesController < ApplicationController
 
   before_action :authentication
 
-  # GET /api/v1/notes
-  def index
-    @notes = Note.all
-    render json: @notes
+  # GET /api/v1/structure/:user_id
+  def structure
+    user = User.find(params[:user_id])
+    if user
+
+      render json: user.folders.to_json(include: [:notes => {include: :tags}] )
+
+    else
+      render json: {error: "User not existant"}, status: :not_found
+    end
+
+
   end
 
   # GET /api/v1/notes/:id
@@ -66,7 +74,7 @@ class Api::V1::NotesController < ApplicationController
   private
 
   def note_params
-    params.require(:note).permit(:title, :body)
+    params.require(:note).permit(:title, :body, :folder_id)
   end
 
   def add_tag_params

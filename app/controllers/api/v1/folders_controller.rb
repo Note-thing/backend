@@ -1,9 +1,10 @@
 class Api::V1::FoldersController < ApplicationController
 
-  # POST /api/v1/folder
+  before_action :authentication
+
+  # POST /api/v1/folders
   def create
     folder = Folder.new(folder_params)
-    puts "FOLDER PARAMS", folder_params, folder.save, folder.errors.full_messages
     if folder.save
       render json: folder, status: :created
     else
@@ -25,7 +26,7 @@ class Api::V1::FoldersController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/folder/:id
+  # DELETE /api/v1/folders/:id
   def destroy
     folder = Folder.find(params[:id])
     if folder
@@ -37,7 +38,7 @@ class Api::V1::FoldersController < ApplicationController
   end
 
 
-  # GET /api/v1/folder/:user_id
+  # GET /api/v1/folders/:user_id
   def get
     user = User.find(params[:user_id])
     if user
