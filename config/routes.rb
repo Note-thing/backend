@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get 'notes/:id/shared_notes', to: 'notes#getAllSharedNotesByNote'
       resources :notes
       get 'shared_notes/copy/:uuid', to: 'shared_notes#copy'
       resources :shared_notes, only: [:show, :create, :destroy]
