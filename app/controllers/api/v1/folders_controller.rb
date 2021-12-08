@@ -5,6 +5,8 @@ class Api::V1::FoldersController < ApplicationController
   # POST /api/v1/folders
   def create
     folder = Folder.new(folder_params)
+    folder.user = logged_in_user
+
     if folder.save
       render json: folder, status: :created
     else
@@ -15,6 +17,8 @@ class Api::V1::FoldersController < ApplicationController
   # PUT /api/v1/folder/:id
   def update
     folder = Folder.find(params[:id])
+    folder.user = logged_in_user
+
     if folder
       if folder.update(folder_params)
         render json: folder, status: :ok
@@ -40,7 +44,8 @@ class Api::V1::FoldersController < ApplicationController
 
   # GET /api/v1/folders/:user_id
   def get
-    user = User.find(params[:user_id])
+    user = logged_in_user
+
     if user
       render json: user.folders, status: :ok
     else
@@ -52,7 +57,7 @@ class Api::V1::FoldersController < ApplicationController
   private
 
   def folder_params
-    params.require(:folder).permit(:title, :user_id)
+    params.require(:folder).permit(:title)
   end
 
 end

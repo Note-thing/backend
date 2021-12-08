@@ -28,3 +28,7 @@
 
 .idea
 .DS_Store
+
+# Fichiers d'environnements, créez un fichier .env à la racine
+# et mettez : JWT_SECRET='tonsecret'
+.env
