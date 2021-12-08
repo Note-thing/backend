@@ -14,8 +14,9 @@ class ApplicationController < ActionController::API
 
         user = User.find(Integer(user_id))
 
-        if user
-            return true
+        if not user.nil?
+            @user = user
+            true
         else
             render json: { message: "Token incorrect." }, status: :forbidden
         end

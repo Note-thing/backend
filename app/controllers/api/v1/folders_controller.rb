@@ -4,7 +4,7 @@ class Api::V1::FoldersController < ApplicationController
 
   # POST /api/v1/folders
   def create
-    folder = Folder.new(folder_params)
+    folder = Folder.new(folder_params.merge({:user_id => @user.id}))
     if folder.save
       render json: folder, status: :created
     else
@@ -14,7 +14,7 @@ class Api::V1::FoldersController < ApplicationController
 
   # PUT /api/v1/folder/:id
   def update
-    folder = Folder.find(params[:id])
+    folder = Folder.where(id: params[:id], user_id: @user.id)[0]
     if folder
       if folder.update(folder_params)
         render json: folder, status: :ok
@@ -28,7 +28,7 @@ class Api::V1::FoldersController < ApplicationController
 
   # DELETE /api/v1/folders/:id
   def destroy
-    folder = Folder.find(params[:id])
+    folder = Folder.where(id: params[:id], user_id: @user.id)[0]
     if folder
       folder.destroy
       render json: {message: "Folder deleted"}, status: :ok
@@ -38,11 +38,10 @@ class Api::V1::FoldersController < ApplicationController
   end
 
 
-  # GET /api/v1/folders/:user_id
+  # GET /api/v1/folders
   def get
-    user = User.find(params[:user_id])
-    if user
-      render json: user.folders, status: :ok
+    if @user
+      render json: @user.folders, status: :ok
     else
       render json: {error: "User not found"}, status: :not_found
     end
@@ -52,7 +51,7 @@ class Api::V1::FoldersController < ApplicationController
   private
 
   def folder_params
-    params.require(:folder).permit(:title, :user_id)
+    params.require(:folder).permit(:title)
   end
 
 end
