@@ -58,9 +58,5 @@ class Api::V1::NotesController < ApplicationController
     params.require(:note).permit(:title, :body, :folder_id)
   end
 
-  def add_tag_params
-    params.require(:note_tag).permit(:tag_id, :note_id)
-  end
-
 
 end
