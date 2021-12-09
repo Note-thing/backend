@@ -4,8 +4,9 @@ class Api::V1::NotesController < ApplicationController
 
   # GET /api/v1/structure
   def structure
-    if @user
-      render json: @user.folders.to_json(include: [:notes => {include: :tags}] )
+    user = User.find(params[:user_id])
+    if user
+      render json: user.folders.to_json(include: [:notes => {include: :tags}] )
     else
       render json: {error: "User not existant"}, status: :not_found
     end

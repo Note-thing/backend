@@ -6,9 +6,9 @@ Rails.application.routes.draw do
       resources :notes, only: [:show, :create, :update, :destroy]
       resources :test, only: [:index]
       resources :folders, only: [:create, :update, :destroy]
-      get '/folders', to: 'folders#get'
+      get '/folders/:user_id', to: 'folders#get'
 
-      get '/structure', to: 'notes#structure'
+      get '/structure/:user_id', to: 'notes#structure'
 
       post '/login', to: 'authentications#login'
       post '/signup', to: 'authentications#signup'

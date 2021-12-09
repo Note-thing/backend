@@ -26,4 +26,3 @@ services:
       DB_NAME: app
       DB_PASSWORD: password
       DB_HOST: db
-      JWT_SECRET: 1234
