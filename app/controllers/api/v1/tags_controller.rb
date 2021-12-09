@@ -42,7 +42,6 @@ class Api::V1::TagsController < ApplicationController
 
   def destroy
     @tag = Tag.find(params[:id])
-    # TODO: retirer tous les éléments de note_tags
     if @tag
       @tag.destroy
       render json: {message: "Tag supprimé"}, status: 200

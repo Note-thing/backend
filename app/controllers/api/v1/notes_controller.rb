@@ -52,25 +52,6 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
-  def addtag
-    @note = Note.find(add_tag_params[:note_id])
-    @tag = Tag.find(add_tag_params[:tag_id])
-    if @note && @tag
-      @note_tag = NoteTag.new(add_tag_params)
-      if @note_tag.save
-        render json: @note_tag
-      else
-        render json: {message: "Erreur..."}, status: 400
-      end
-    end
-  end
-
-  # TODO : make the delete
-  def delTag
-    @note_tag = NoteTag.find()
-  end
-
-
   private
 
   def note_params
