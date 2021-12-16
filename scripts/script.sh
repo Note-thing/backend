@@ -18,6 +18,5 @@ bin/rails db:schema:load RAILS_ENV=production DISABLE_DATABASE_ENVIRONMENT_CHECK
 # rm -f tmp/pids/server.pid
 # killall -9 rails
 killall -9 ruby
-screen bin/rails server -e production -p 4000 -d
+bin/rails server -d -e production -p 4000
 
-exit 0 
