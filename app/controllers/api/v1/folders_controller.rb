@@ -42,7 +42,7 @@ class Api::V1::FoldersController < ApplicationController
   end
 
 
-  # GET /api/v1/folders/:user_id
+  # GET /api/v1/folders
   def get
     user = logged_in_user
 
