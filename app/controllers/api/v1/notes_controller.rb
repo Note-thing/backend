@@ -4,7 +4,7 @@ class Api::V1::NotesController < ApplicationController
 
   # GET /api/v1/structure
   def structure
-    user = User.find(params[:user_id])
+    user = logged_in_user
     if user
       render json: user.folders.to_json(include: [:notes => {include: :tags}] )
     else
