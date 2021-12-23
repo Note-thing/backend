@@ -24,7 +24,7 @@ class Api::V1::NotesController < ApplicationController
     if @note.save
       render json: @note
     else
-      render error: {error: 'Unable de créer une note'}, status: 400
+      render json: {error: 'Unable de créer une note'}, status: 400
     end
   end
 
@@ -35,7 +35,7 @@ class Api::V1::NotesController < ApplicationController
       @note.update(note_params)
       render json: @note
     else
-      render error: {error: 'Unable de update la note'}, status: 400
+      render json: {error: 'Unable de update la note'}, status: 400
     end
   end
 
