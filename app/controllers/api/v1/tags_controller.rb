@@ -3,8 +3,11 @@ class Api::V1::TagsController < ApplicationController
   before_action :authentication
 
   def index
-    @tags = Tag.all
-    render json: @tags
+    # tags = Tag.all
+    user = logged_in_user
+    # @user.images.includes(:comments).map(&:comments)
+
+    render json: tags
   end
 
   def show
@@ -13,10 +16,10 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def create
-    note = Note.find(params[:note_id])
-
-    unless note
-      render error: {error: 'Note not found'}, status: :not_found
+    begin
+      note = Note.find(params[:note_id])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: {error: e.message }, status: :not_found
       return
     end
 
@@ -26,7 +29,7 @@ class Api::V1::TagsController < ApplicationController
       tag.note_tags.create({note_id: note.id})
       render json: tag
     else
-      render error: {error: 'Impossible de créer un tag'}, status: 400
+      render json: {error: 'Impossible de créer un tag'}, status: 400
     end
   end
 
@@ -36,7 +39,7 @@ class Api::V1::TagsController < ApplicationController
       @tag.update(note_params)
       render json: @tag
     else
-      render error: {error: 'Impossible de modifier le tag'}, status: 400
+      render json: {error: 'Impossible de modifier le tag'}, status: 400
     end
   end
 
@@ -53,4 +56,5 @@ class Api::V1::TagsController < ApplicationController
   def tag_params
     params.require(:tag).permit(:title)
   end
+
 end

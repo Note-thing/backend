@@ -9,14 +9,19 @@ class ApplicationController < ActionController::API
             return false
         end
 
-        decode_data = JsonWebToken.decode(token)
+        begin
+            decode_data = JsonWebToken.decode(token)
+        rescue ExceptionHandler::ExpiredSignature => e
+            render json: { message: "Access denied!. Token has expired."}, status: :forbidden
+            return
+        end
 
         user_id = decode_data["user_id"] if decode_data
 
         user = User.find(Integer(user_id))
 
         if user
-            return true
+            true
         else
             render json: { message: "Token incorrect." }, status: :forbidden
         end
@@ -28,7 +33,12 @@ class ApplicationController < ActionController::API
         if token.nil?
             return nil
         end
-        decode_data = JsonWebToken.decode(token)
+        begin
+            decode_data = JsonWebToken.decode(token)
+        rescue ExceptionHandler::DecodeError => e
+            render json: { message: e.inspect }, status: :forbidden
+        end
+
         unless decode_data
             return nil
         end
