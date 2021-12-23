@@ -41,8 +41,5 @@ for i in 1..N_NOTES do
     t = Tag.new(title: gen.adverb)
     t.save
     t.note_tags.create({note_id: i})
-
   end
-
-
 end
