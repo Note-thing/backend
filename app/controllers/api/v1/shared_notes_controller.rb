@@ -33,13 +33,13 @@ class Api::V1::SharedNotesController < ApplicationController
       end
     end
 
-    # GET /api/v1/shared_notes/copy/:uuid
+    # GET /api/v1/shared_notes/:uuid/copy
     def copy
         sharedNote = SharedNote.find_by(uuid: params[:uuid])
         note = Note.new()
-
         note.title = sharedNote.title
         note.body = sharedNote.body
+        note.folder_id = params[:folderId]
         if note.save
             render json: note
           else
