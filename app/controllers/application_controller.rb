@@ -36,7 +36,6 @@ class ApplicationController < ActionController::API
         begin
             decode_data = JsonWebToken.decode(token)
         rescue ExceptionHandler::DecodeError => e
-            puts "pute"
             render json: { message: e.inspect }, status: :forbidden
         end
 
