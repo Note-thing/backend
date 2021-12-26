@@ -36,15 +36,22 @@ class Api::V1::SharedNotesController < ApplicationController
     # GET /api/v1/shared_notes/:uuid/copy
     def copy
         sharedNote = SharedNote.find_by(uuid: params[:uuid])
+        unless sharedNote
+            render json: {error: 'note not found', status: 404}, status: 404
+            return
+        end
+
+    
         note = Note.new()
         note.title = sharedNote.title
         note.body = sharedNote.body
         note.folder_id = params[:folderId]
         if note.save
             render json: note
-          else
-            render json: {error: 'Unable to copy the note', status: 400}, status: 400
-          end
+        else
+            render json: {error: 'Unable to copy the note', status: 422}, status: 422
+        end
+      
     end
   
     private
