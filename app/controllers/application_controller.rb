@@ -14,6 +14,10 @@ class ApplicationController < ActionController::API
         rescue ExceptionHandler::ExpiredSignature => e
             render json: { message: "Access denied!. Token has expired."}, status: :forbidden
             return
+
+        rescue ExceptionHandler::DecodeError => e
+            render json: { message: "No JWT secret. Please read the README.md."}, status: :forbidden
+            return
         end
 
         user_id = decode_data["user_id"] if decode_data
