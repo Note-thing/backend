@@ -3,11 +3,10 @@ class Api::V1::TagsController < ApplicationController
   before_action :authentication
 
   def index
-    # tags = Tag.all
     user = logged_in_user
-    # @user.images.includes(:comments).map(&:comments)
 
-    render json: tags
+    # Cette ligne, c'est 10% de mes capacités.
+    render json: Tag.joins(notes: :folder).where(folders: {user_id: user.id})
   end
 
   def show
