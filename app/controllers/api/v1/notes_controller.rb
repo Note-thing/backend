@@ -1,9 +1,15 @@
 class Api::V1::NotesController < ApplicationController
 
-  # GET /api/v1/notes
-  def index
-    @notes = Note.all
-    render json: @notes
+  before_action :authentication
+
+  # GET /api/v1/structure
+  def structure
+    user = logged_in_user
+    if user
+      render json: user.folders.to_json(include: [:notes => {include: :tags}] )
+    else
+      render json: {error: "User not existant"}, status: :not_found
+    end
   end
 
   # GET /api/v1/notes/:id
@@ -18,7 +24,7 @@ class Api::V1::NotesController < ApplicationController
     if @note.save
       render json: @note
     else
-      render error: {error: 'Unable de créer une note'}, status: 400
+      render json: {error: 'Unable de créer une note'}, status: 400
     end
   end
 
@@ -29,7 +35,7 @@ class Api::V1::NotesController < ApplicationController
       @note.update(note_params)
       render json: @note
     else
-      render error: {error: 'Unable de update la note'}, status: 400
+      render json: {error: 'Unable de update la note'}, status: 400
     end
   end
 
@@ -47,12 +53,10 @@ class Api::V1::NotesController < ApplicationController
         render json: SharedNote.where(note_id: params[:id])
     end
 
+
   private
 
   def note_params
     params.require(:note).permit(:title, :body)
   end
-  
-
-
 end
