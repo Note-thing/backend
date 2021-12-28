@@ -50,8 +50,7 @@ class Api::V1::NotesController < ApplicationController
 
   # GET /api/v1/notes/:id/shared_notes
   def getAllSharedNotesByNote
-    # TODO utiliser la relation plutot que trouver par note_id : note = Note.find(xx); return note.shared_note;
-    render json: SharedNote.where(note_id: params[:id])
+    render json: Note.find(params[:id]).shared_notes
   end
 
   private
