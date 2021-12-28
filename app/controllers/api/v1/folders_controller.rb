@@ -8,7 +8,7 @@ class Api::V1::FoldersController < ApplicationController
     folder.user = logged_in_user
 
     if folder.save
-      render json: folder, status: :created
+      render json: folder.to_json(include: :notes), status: :created
     else
       render json: {error: folder.errors.full_messages }, status: :bad_request
     end

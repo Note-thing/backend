@@ -6,7 +6,7 @@ class Api::V1::NotesController < ApplicationController
   def structure
     user = logged_in_user
     if user
-      render json: user.folders.to_json(include: [:notes => {include: :tags}] )
+      render json: user.folders.to_json(include: [notes: {include: :tags}] )
     else
       render json: {error: "User not existant"}, status: :not_found
     end
@@ -22,9 +22,9 @@ class Api::V1::NotesController < ApplicationController
   def create
     @note = Note.new(note_params)
     if @note.save
-      render json: @note
+      render json: @note.to_json(include: :tags)
     else
-      render json: {error: 'Unable de créer une note'}, status: 400
+      render json: {error: "Cannot créer la note"}, status: 400
     end
   end
 
@@ -56,6 +56,6 @@ class Api::V1::NotesController < ApplicationController
   private
 
   def note_params
-    params.require(:note).permit(:title, :body)
+    params.require(:note).permit(:title, :body, :folder_id)
   end
 end
