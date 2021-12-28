@@ -48,9 +48,14 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
+  # GET /api/v1/notes/:id/shared_notes
+  def getAllSharedNotesByNote
+    render json: Note.find(params[:id]).shared_notes
+  end
+
   private
 
   def note_params
-    params.require(:note).permit(:title, :body, :folder_id)
+    params.require(:note).permit(:title, :body)
   end
 end
