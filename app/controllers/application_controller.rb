@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
         token = get_token
 
         if token.nil?
-            render json: { message: "Missing le token." }, status: :forbidden
+            render json: { errors: ["Missing le token."] }, status: :forbidden
             return false
         end
 
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::API
         if user
             true
         else
-            render json: { message: "Token incorrect." }, status: :forbidden
+            render json: { errors: ["Token incorrect."] }, status: :forbidden
         end
     end
 
