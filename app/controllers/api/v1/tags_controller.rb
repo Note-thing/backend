@@ -15,6 +15,13 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def create
+    Note.find(params[:note_id]).tags.each do |tag|
+      if tag.title == params[:title]
+        render json: {error: ["title of tag must be uniq"]}
+        return
+      end
+    end
+
     begin
       note = Note.find(params[:note_id])
     rescue ActiveRecord::RecordNotFound => e
@@ -28,7 +35,7 @@ class Api::V1::TagsController < ApplicationController
       tag.note_tags.create({note_id: note.id})
       render json: tag
     else
-      render json: {error: 'Impossible de créer un tag'}, status: 400
+      render json: {error: tag.errors.full_messages}, status: 400
     end
   end
 
