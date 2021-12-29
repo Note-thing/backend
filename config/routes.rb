@@ -17,7 +17,10 @@ Rails.application.routes.draw do
       resources :shared_notes, only: [:show, :create, :destroy]
 
       post '/login', to: 'authentications#login'
+
       post '/signup', to: 'authentications#signup'
+
+      match '*path', via: [:options], to: lambda {|_| [204, { 'Content-Type' => 'text/plain' }]}
     end
   end
 end
