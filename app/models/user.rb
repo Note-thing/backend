@@ -4,7 +4,10 @@ class User < ApplicationRecord
 
     has_secure_password
 
-    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalide"}
+    validates :email,
+              format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalide"},
+              presence: true,
+              uniqueness: true
 
     # TODO: confirmation: true
     validates :password, presence: true, length: {within: 6..42}
