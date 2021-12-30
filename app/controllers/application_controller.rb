@@ -53,7 +53,7 @@ class ApplicationController < ActionController::API
             return nil
         end
 
-        @user = User.find(user_id)
+        user = User.find(user_id)
     end
 
     def get_token
