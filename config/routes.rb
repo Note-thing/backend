@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       post 'shared_notes/:uuid/copy', to: 'shared_notes#copy'
       resources :shared_notes, only: [:show, :create, :destroy]
 
-      post '/login', to: 'authentications#login'
+      post '/signin', to: 'authentications#signin'
 
       post '/signup', to: 'authentications#signup'
 
