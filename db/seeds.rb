@@ -38,8 +38,6 @@ end
 # ajoute N_TAGS_PER_NOTE tags par note
 for i in 1..N_NOTES do
   for _ in 1..N_TAGS_PER_NOTE do
-    t = Tag.new(title: gen.adverb)
-    t.save
-    t.note_tags.create({note_id: i})
+    t = Tag.create(title: gen.adverb, note_id: i)
   end
 end

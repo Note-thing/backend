@@ -15,11 +15,6 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def create
-    unless validate_title_note_uniq params[:note_id], params[:title]
-      render json: {error: ["title of tag must be uniq"]}
-      return
-    end
-
     begin
       note = Note.find(params[:note_id])
     rescue ActiveRecord::RecordNotFound => e
@@ -57,14 +52,7 @@ class Api::V1::TagsController < ApplicationController
 
   private
 
-  def validate_title_note_uniq(note_id, title)
-    Note.find(note_id).tags.each do |tag|
-      if tag.title == title
-        return false
-      end
-    end
-    true
-  end
+
 
   def tag_params
     params.require(:tag).permit(:title)
