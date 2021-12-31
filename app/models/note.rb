@@ -17,7 +17,7 @@ class Note < ApplicationRecord
 
   has_many :shared_notes, dependent: :destroy
 
-  validates :title, :body, presence: true
+  validates :title, presence: true
 
   validates :title, length: { minimum: 1, maximum: 64 }
   validates :body, length: { maximum: 1024 }
