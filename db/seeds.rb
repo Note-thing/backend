@@ -21,7 +21,7 @@ content = [
   "Pellentesque vulputate nec elit sit amet egestas. Duis ac lacus mattis enim aliquam ullamcorper in quis dolor. Integer convallis lorem in justo interdum, et rhoncus quam rhoncus. Pellentesque laoreet eros non risus tempor consectetur. Curabitur dictum magna lacus, at semper mauris imperdiet eu. Nulla sollicitudin mi non metus auctor malesuada. Quisque ornare odio ut volutpat varius. Ut eu interdum nisl. Ut id aliquam est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus vehicula, tellus a gravida lacinia, erat elit finibus ante, ut sollicitudin justo ipsum sit amet enim. Maecenas ornare tincidunt pretium."
 ]
 
-user = User.create(email: "note-thing@pm.me", password: "1234")
+user = User.create(email: "note-thing@pm.me", password: "123456", firstname: "victor", lastname: "hugo")
 
 N_FOLDERS.times do
   Folder.create(title: gen.adjective, user: user)

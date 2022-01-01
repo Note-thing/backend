@@ -66,4 +66,7 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.debug_exception_response_format = :api
+  config.eager_load = true
+
+  config.reload_classes_only_on_change = false
 end

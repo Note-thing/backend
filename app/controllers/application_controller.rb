@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
 
-
     def authentication
         token = get_token
 
@@ -12,12 +11,9 @@ class ApplicationController < ActionController::API
         begin
             decode_data = JsonWebToken.decode(token)
         rescue ExceptionHandler::ExpiredSignature => e
-            render json: { message: "Access denied!. Token has expired."}, status: :forbidden
-            return
-
+            raise InvalidTokenError("token has expired")
         rescue ExceptionHandler::DecodeError => e
-            render json: { message: "No JWT secret. Please read the README.md."}, status: :forbidden
-            return
+            raise InvalidTokenError
         end
 
         user_id = decode_data["user_id"] if decode_data
@@ -27,10 +23,9 @@ class ApplicationController < ActionController::API
         if user
             true
         else
-            render json: { errors: ["Token incorrect."] }, status: :forbidden
+            raise InvalidTokenError
         end
     end
-
 
     def logged_in_user
         token = get_token
@@ -40,7 +35,7 @@ class ApplicationController < ActionController::API
         begin
             decode_data = JsonWebToken.decode(token)
         rescue ExceptionHandler::DecodeError => e
-            render json: { message: e.inspect }, status: :forbidden
+            raise InvalidTokenError
         end
 
         unless decode_data
@@ -65,7 +60,20 @@ class ApplicationController < ActionController::API
     end
 
     def authorized
-        render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+        raise MissingTokenError unless logged_in?
+    end
+
+    rescue_from BadRequestError,
+                InvalidCredentialsError,
+                InvalidInformationError,
+                InvalidTokenError,
+                MissingTokenError,
+                NoJWTSecretError,
+                NotFoundError,
+                UnprocessableEntityError, with: :render_error_response
+
+    def render_error_response(exception)
+        render json: { message: exception.message , code: exception.code }, status: exception.http_status
     end
 
 end

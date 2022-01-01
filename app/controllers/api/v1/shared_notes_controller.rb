@@ -4,32 +4,34 @@ class Api::V1::SharedNotesController < ApplicationController
 
   # GET /api/v1/shared_notes/:id
   def show
-    @sharedNote = SharedNote.find(params[:id])
-    render json: @sharedNote
+    sharedNote = SharedNote.find(params[:id])
+    render json: sharedNote
   end
 
   # POST /api/v1/shared_notes
   def create
-    @note = Note.find(params[:id])
+    # TODO: s'assurer que la note appartient à l'utilisateur connecté
+    note = Note.find(params[:id])
 
-    @sharedNote = SharedNote.new()
-    @sharedNote.title = @note.title
-    @sharedNote.body = @note.body
-    @sharedNote.note_id = @note.id
-    @sharedNote.uuid = SecureRandom.uuid
-    if @sharedNote.save
-      render json: @sharedNote
+    sharedNote = SharedNote.new()
+    sharedNote.title = note.title
+    sharedNote.body = note.body
+    sharedNote.note_id = note.id
+    sharedNote.uuid = SecureRandom.uuid
+    if sharedNote.save
+      render json: sharedNote
     else
-      render error: {error: 'Not able to create a shared note'}, status: 400
+      # render error: {error: 'Not able to create a shared note'}, status: 400
+      raise BadRequestError("unable to create a shared note")
     end
   end
 
 
   # DELETE /api/v1/shared_notes/:id
   def destroy
-    @sharedNote = SharedNote.find(params[:id])
-    if @sharedNote
-      @sharedNote.destroy
+    sharedNote = SharedNote.find(params[:id])
+    if sharedNote
+      sharedNote.destroy
       render json: {message: "shared note deleted"}, status: 200
     end
   end
@@ -38,10 +40,9 @@ class Api::V1::SharedNotesController < ApplicationController
   def copy
     sharedNote = SharedNote.find_by(uuid: params[:uuid])
     unless sharedNote
-      render json: {error: 'note not found', status: 404}, status: 404
-      return
+      #render json: {error: 'note not found', status: 404}, status: 404
+      raise NotFoundError("note not found")
     end
-
 
     note = Note.new()
     note.title = sharedNote.title
@@ -50,7 +51,8 @@ class Api::V1::SharedNotesController < ApplicationController
     if note.save
       render json: note
     else
-      render json: {error: 'Unable to copy the note', status: 422}, status: 422
+      #render json: {error: 'Unable to copy the note', status: 422}, status: 422
+      raise UnprocessableEntityError("unable to copy the note")
     end
 
   end

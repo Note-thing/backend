@@ -8,42 +8,45 @@ class Api::V1::NotesController < ApplicationController
     if user
       render json: user.folders.to_json(include: [notes: {include: :tags}] )
     else
-      render json: {error: "User not existant"}, status: :not_found
+      # render json: {error: "User not existant"}, status: :not_found
+      raise NotFoundError("user not found")
     end
   end
 
   # GET /api/v1/notes/:id
   def show
-    @note = Note.find(params[:id])
-    render json: @note
+    note = Note.find(params[:id])
+    render json: note
   end
 
   # POST /api/v1/notes
   def create
-    @note = Note.new(note_params)
-    if @note.save
-      render json: @note.to_json(include: :tags)
+    note = Note.new(note_params)
+    if note.save
+      render json: note.to_json(include: :tags)
     else
-      render json: {error: "Cannot créer la note"}, status: 400
+      #render json: {error: "Cannot créer la note"}, status: 400
+      raise BadRequestError("unable to create note")
     end
   end
 
   # PUT /api/v1/notes/:id
   def update
-    @note = Note.find(params[:id])
-    if @note
-      @note.update(note_params)
-      render json: @note
+    note = Note.find(params[:id])
+    if note
+      note.update(note_params)
+      render json: note
     else
-      render json: {error: 'Unable de update la note'}, status: 400
+      # render json: {error: 'Unable de update la note'}, status: 400
+      raise BadRequestError("unable to update note")
     end
   end
 
   # DELETE /api/v1/notes/:id
   def destroy
-    @note = Note.find(params[:id])
-    if @note
-      @note.destroy
+    note = Note.find(params[:id])
+    if note
+      note.destroy
       render json: {message: "Note deleted"}, status: 200
     end
   end

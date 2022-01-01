@@ -10,8 +10,8 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def show
-    @tag = Tag.find(params[:id])
-    render json: @tag
+    tag = Tag.find(params[:id])
+    render json: tag
   end
 
   def create
@@ -51,8 +51,6 @@ class Api::V1::TagsController < ApplicationController
   end
 
   private
-
-
 
   def tag_params
     params.require(:tag).permit(:title)
