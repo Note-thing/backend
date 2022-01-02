@@ -11,9 +11,9 @@ class ApplicationController < ActionController::API
         begin
             decode_data = JsonWebToken.decode(token)
         rescue ExceptionHandler::ExpiredSignature => e
-            raise InvalidTokenError("token has expired")
+            raise InvalidTokenError.new(e)
         rescue ExceptionHandler::DecodeError => e
-            raise InvalidTokenError
+            raise InvalidTokenError.new(e)
         end
 
         user_id = decode_data["user_id"] if decode_data
@@ -35,7 +35,7 @@ class ApplicationController < ActionController::API
         begin
             decode_data = JsonWebToken.decode(token)
         rescue ExceptionHandler::DecodeError => e
-            raise InvalidTokenError
+            raise InvalidTokenError.new(e)
         end
 
         unless decode_data

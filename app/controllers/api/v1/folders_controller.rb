@@ -10,8 +10,7 @@ class Api::V1::FoldersController < ApplicationController
     if folder.save
       render json: folder.to_json(include: :notes), status: :created
     else
-      # render json: {error: folder.errors.full_messages }, status: :bad_request
-      raise BadRequestError(folder.errors.full_messages)
+      raise BadRequestError.new(folder.errors.full_messages)
     end
   end
 
@@ -24,12 +23,10 @@ class Api::V1::FoldersController < ApplicationController
       if folder.update(folder_params)
         render json: folder, status: :ok
       else
-        # render json: {error: folder.errors.full_messages }, status: :bad_request
-        raise BadRequestError(folder.errors.full_messages)
+        raise BadRequestError.new(folder.errors.full_messages)
       end
     else
-      #render json: {error: "Folder not found"}, status: :not_found
-      raise NotFoundError("folder not found")
+      raise NotFoundError.new("folder not found")
     end
   end
 
@@ -40,8 +37,7 @@ class Api::V1::FoldersController < ApplicationController
       folder.destroy
       render json: {message: "Folder deleted"}, status: :ok
     else
-      # render json: {error: "Folder not found"}, status: :not_found
-      raise NotFoundError("folder not found")
+      raise NotFoundError.new("folder not found")
     end
   end
 
@@ -53,8 +49,7 @@ class Api::V1::FoldersController < ApplicationController
     if user
       render json: user.folders, status: :ok
     else
-      #render json: {error: "User not found"}, status: :not_found
-      raise NotFoundError("user not found")
+      raise NotFoundError.new("user not found")
     end
 
   end

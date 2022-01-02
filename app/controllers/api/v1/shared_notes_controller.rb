@@ -19,10 +19,9 @@ class Api::V1::SharedNotesController < ApplicationController
     sharedNote.note_id = note.id
     sharedNote.uuid = SecureRandom.uuid
     if sharedNote.save
-      render json: sharedNote
+      render json: sharedNote, status: :created
     else
-      # render error: {error: 'Not able to create a shared note'}, status: 400
-      raise BadRequestError("unable to create a shared note")
+      raise BadRequestError.new("unable to create a shared note")
     end
   end
 
@@ -32,7 +31,7 @@ class Api::V1::SharedNotesController < ApplicationController
     sharedNote = SharedNote.find(params[:id])
     if sharedNote
       sharedNote.destroy
-      render json: {message: "shared note deleted"}, status: 200
+      render json: {message: "shared note deleted"}, status: :ok
     end
   end
 
@@ -41,7 +40,7 @@ class Api::V1::SharedNotesController < ApplicationController
     sharedNote = SharedNote.find_by(uuid: params[:uuid])
     unless sharedNote
       #render json: {error: 'note not found', status: 404}, status: 404
-      raise NotFoundError("note not found")
+      raise NotFoundError.new("note not found")
     end
 
     note = Note.new()
@@ -52,7 +51,7 @@ class Api::V1::SharedNotesController < ApplicationController
       render json: note
     else
       #render json: {error: 'Unable to copy the note', status: 422}, status: 422
-      raise UnprocessableEntityError("unable to copy the note")
+      raise UnprocessableEntityError.new("unable to copy the note")
     end
 
   end
