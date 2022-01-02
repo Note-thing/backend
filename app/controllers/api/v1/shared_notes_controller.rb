@@ -4,8 +4,8 @@ class Api::V1::SharedNotesController < ApplicationController
 
   # GET /api/v1/shared_notes/:id
   def show
-    sharedNote = SharedNote.find(params[:id])
-    render json: sharedNote
+    shared_note = SharedNote.find(params[:id])
+    render json: shared_note
   end
 
   # POST /api/v1/shared_notes
@@ -13,13 +13,13 @@ class Api::V1::SharedNotesController < ApplicationController
     # TODO: s'assurer que la note appartient à l'utilisateur connecté
     note = Note.find(params[:id])
 
-    sharedNote = SharedNote.new()
-    sharedNote.title = note.title
-    sharedNote.body = note.body
-    sharedNote.note_id = note.id
-    sharedNote.uuid = SecureRandom.uuid
-    if sharedNote.save
-      render json: sharedNote, status: :created
+    shared_note = SharedNote.new
+    shared_note.title = note.title
+    shared_note.body = note.body
+    shared_note.note_id = note.id
+    shared_note.uuid = SecureRandom.uuid
+    if shared_note.save
+      render json: shared_note, status: :created
     else
       raise BadRequestError.new("unable to create a shared note")
     end
@@ -28,24 +28,24 @@ class Api::V1::SharedNotesController < ApplicationController
 
   # DELETE /api/v1/shared_notes/:id
   def destroy
-    sharedNote = SharedNote.find(params[:id])
-    if sharedNote
-      sharedNote.destroy
+    shared_note = SharedNote.find(params[:id])
+    if shared_note
+      shared_note.destroy
       render json: {message: "shared note deleted"}, status: :ok
     end
   end
 
   # GET /api/v1/shared_notes/:uuid/copy
   def copy
-    sharedNote = SharedNote.find_by(uuid: params[:uuid])
-    unless sharedNote
+    shared_note = SharedNote.find_by(uuid: params[:uuid])
+    unless shared_note
       #render json: {error: 'note not found', status: 404}, status: 404
       raise NotFoundError.new("note not found")
     end
 
-    note = Note.new()
-    note.title = sharedNote.title
-    note.body = sharedNote.body
+    note = Note.new
+    note.title = shared_note.title
+    note.body = shared_note.body
     note.folder_id = params[:folderId]
     if note.save
       render json: note
