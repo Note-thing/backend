@@ -24,6 +24,18 @@ class Api::V1::AuthenticationsController < ApplicationController
         end
     end
 
+    def changepassword
+        user = User.find_by(email: params[:email])
+        if user && user.authenticate(params[:password])
+            user.password = params[:newpassword]
+            if user.save
+                render json: {"Status":"OK"}, status: :ok
+            end
+        else
+            raise InvalidCredentialsError
+        end
+    end
+
     private
 
     def user_params

@@ -20,6 +20,8 @@ Rails.application.routes.draw do
 
       post '/signup', to: 'authentications#signup'
 
+      post '/changepassword', to: 'authentications#changepassword'
+
       match '*path', via: [:options], to: lambda {|_| [204, { 'Content-Type' => 'text/plain' }]}
     end
   end
