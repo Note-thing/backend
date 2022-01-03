@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_31_164415) do
+ActiveRecord::Schema.define(version: 2022_01_02_143527) do
 
   create_table "folders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "title"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 2021_12_31_164415) do
     t.datetime "updated_at", null: false
     t.string "firstname"
     t.string "lastname"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
 
   add_foreign_key "folders", "users"
