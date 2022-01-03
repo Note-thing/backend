@@ -1,6 +1,6 @@
 class NoJWTSecretError < StandardError
 
-  attr_accessor :message
+  attr_accessor :messages
 
   def http_status
     403
@@ -13,15 +13,15 @@ class NoJWTSecretError < StandardError
   def initialize(*msg)
     super
     if msg.length == 0
-      self.message = ["invalid token"]
+      self.messages = ["invalid token"]
     else
-      self.message = msg
+      self.messages = msg
     end
   end
 
   def to_hash
     {
-      messages: message,
+      messages: messages,
       code: code
     }
   end
