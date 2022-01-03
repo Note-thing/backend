@@ -2,6 +2,8 @@
 require 'securerandom'
 class Api::V1::SharedNotesController < ApplicationController
 
+  before_action :authentication, only: [:create]
+
   # GET /api/v1/shared_notes/:id
   def show
     sharedNote = SharedNote.find(params[:id])
@@ -11,7 +13,13 @@ class Api::V1::SharedNotesController < ApplicationController
   # POST /api/v1/shared_notes
   def create
     # TODO: s'assurer que la note appartient à l'utilisateur connecté
+
+    user = logged_in_user
     note = Note.find(params[:id])
+
+    if note.folder.user.id != user.id
+      raise BadRequestError("unable to create a shared note")
+    end
 
     sharedNote = SharedNote.new()
     sharedNote.title = note.title
