@@ -2,6 +2,8 @@
 require 'securerandom'
 class Api::V1::SharedNotesController < ApplicationController
 
+  before_action :authentication
+
   # GET /api/v1/shared_notes/:id
   def show
     shared_note = SharedNote.find(params[:id])
