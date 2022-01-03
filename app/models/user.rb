@@ -27,19 +27,25 @@ class User < ApplicationRecord
 
     has_many :folders, dependent: :destroy
 
-    def generate_password_token!
-        self.reset_password_token = generate_token
+    def generate_password_token!(current_password)
+        token = generate_token
+        self.reset_password_token = token
         self.reset_password_sent_at = Time.now.utc
-        save!
+        self.password_digest = current_password
+        # TODO: sans validate: false la validation de password ne fonctione plus.. 🤔
+        save!(validate: false)
+        token
     end
 
-    def password_token_valid?
-        (self.reset_password_sent_at + 4.hours) > Time.now.utc
+    def password_token_valid?(password_token)
+        puts password_token, self.reset_password_token
+        ((self.reset_password_sent_at + 4.hours) > Time.now.utc) && (password_token == self.reset_password_token)
     end
 
     def reset_password!(password)
         self.reset_password_token = nil
         self.password = password
+        self.password_confirmation = password
         save!
     end
 
