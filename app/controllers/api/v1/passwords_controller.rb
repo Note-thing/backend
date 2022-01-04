@@ -1,27 +1,31 @@
 class Api::V1::PasswordsController < ApplicationController
 
-  before_action :authentication
-
   def forgot
-    user = logged_in_user
+    if params[:email].blank?
+      raise BadRequestError.new("email not present")
+    end
+
+    email = params[:email]
+    user = User.find_by(email: email.downcase)
 
     unless user
       raise NotFoundError.new("user not found")
     end
 
     token = user.generate_password_token!(user.password_digest)
-    # SEND EMAIL HERE
+
+    # envoi de l'email à user avec le token ici
     PasswordMailer.with(user: user, token: token).new_password_email.deliver_later
 
     render json: {status: 'mail sent'}, status: :ok
   end
 
   def reset
-    password_token = params[:password_token].to_s
+    token = params[:password_token].to_s
 
-    user = logged_in_user
+    user = User.find_by(reset_password_token: token)
 
-    if user.present? && user.password_token_valid?(password_token)
+    if user.present? && user.password_token_valid?(token)
       if user.reset_password!(params[:password])
         render json: {status: 'resetted'}, status: :ok
       else
