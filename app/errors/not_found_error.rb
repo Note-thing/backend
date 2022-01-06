@@ -11,13 +11,9 @@ class NotFoundError < StandardError
     "not_found"
   end
 
-  def initialize(*msg)
+  def initialize(msg = ["not found"])
     super
-    if msg.length == 0
-      self.messages = ["invalid token"]
-    else
-      self.messages = msg
-    end
+    self.messages = *msg
   end
 
   def to_hash

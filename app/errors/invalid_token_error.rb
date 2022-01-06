@@ -11,13 +11,9 @@ class InvalidTokenError < StandardError
     "invalid_token"
   end
 
-  def initialize(*msg)
+  def initialize(msg = ["invalid token"])
     super
-    if msg.length == 0
-      self.messages = ["invalid token"]
-    else
-      self.messages = msg
-    end
+    self.messages = *msg
   end
 
   def to_hash

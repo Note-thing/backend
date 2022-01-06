@@ -11,13 +11,9 @@ class MissingTokenError < StandardError
     "missing_token"
   end
 
-  def initialize(*msg)
+  def initialize(msg = ["missing token"])
     super
-    if msg.length == 0
-      self.messages = ["invalid token"]
-    else
-      self.messages = msg
-    end
+    self.messages = *msg
   end
 
   def to_hash

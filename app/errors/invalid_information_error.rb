@@ -11,13 +11,9 @@ class InvalidInformationError < StandardError
     "invalid_information"
   end
 
-  def initialize(*msg)
+  def initialize(msg = ["invalid information"])
     super
-    if msg.length == 0
-      self.messages = ["invalid token"]
-    else
-      self.messages = msg
-    end
+    self.messages = *msg
   end
 
   def to_hash

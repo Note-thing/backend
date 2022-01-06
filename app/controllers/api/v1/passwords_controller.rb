@@ -32,7 +32,7 @@ class Api::V1::PasswordsController < ApplicationController
         raise UnprocessableEntityError.new(user.errors.full_messages)
       end
     else
-      raise NotFoundError.new("Link not valid or expired. Try generating a new link.")
+      raise BadRequestError.new("Link not valid or expired. Try generating a new link.")
     end
   end
 

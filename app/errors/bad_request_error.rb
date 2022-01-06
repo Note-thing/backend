@@ -10,13 +10,9 @@ class BadRequestError < StandardError
     "bad_request"
   end
 
-  def initialize(*msg)
+  def initialize(msg = ["bad request"])
     super
-    if msg.length == 0
-      self.messages = ["invalid token"]
-    else
-      self.messages = msg
-    end
+    self.messages = *msg
   end
 
   def to_hash

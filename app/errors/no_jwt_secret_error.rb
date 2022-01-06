@@ -10,13 +10,9 @@ class NoJWTSecretError < StandardError
     "no_jwt_secret"
   end
 
-  def initialize(*msg)
+  def initialize(msg = ["no jwt secret"])
     super
-    if msg.length == 0
-      self.messages = ["invalid token"]
-    else
-      self.messages = msg
-    end
+    self.messages = *msg
   end
 
   def to_hash
