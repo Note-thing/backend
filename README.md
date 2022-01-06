@@ -20,6 +20,7 @@ docker-compose up
 ```
 mv .env.example .env
 ```
+Afin d'envoyer des mails de reset de mot de passe, nous utilisons `gmail`. Veillez à avoir une configuration gmail présente dans le `.env`, via les variables `EMAIl=example@gmail.com` et `EMAIL_PASSWORD=password`.
 
 4. Allez à l'adresse [localhost:3001](http://localhost:3001/) et vous voilà prêt à contribuer 😎. 
 

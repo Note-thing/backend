@@ -4,7 +4,6 @@ Rails.application.routes.draw do
       resources :tags
       post '/notes/tag', to: 'notes#addtag'
       resources :notes, only: [:show, :create, :update, :destroy]
-      resources :test, only: [:index]
       resources :folders, only: [:create, :update, :destroy]
       get '/folders', to: 'folders#get'
 
