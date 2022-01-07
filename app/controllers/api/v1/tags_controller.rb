@@ -5,8 +5,8 @@ class Api::V1::TagsController < ApplicationController
   def index
     user = logged_in_user
 
-    # Cette ligne, c'est 10% de mes capacités.
-    render json: Tag.joins(notes: :folder).where(folders: {user_id: user.id}), status: :ok
+    # Cette ligne, c'est 15% de mes capacités.
+    render json: Tag.joins(note: :folder).where(folders: {user_id: user.id}), status: :ok
   end
 
   def show
@@ -21,10 +21,9 @@ class Api::V1::TagsController < ApplicationController
       raise NotFoundError.new(e.message)
     end
 
-    tag = Tag.new(tag_params)
+    tag = Tag.new(note_id: note.id, title: params[:title])
 
     if tag.save
-      tag.note_tags.create({note_id: note.id})
       render json: tag, status: :created
     else
       raise BadRequestError.new(tag.errors.full_messages)
