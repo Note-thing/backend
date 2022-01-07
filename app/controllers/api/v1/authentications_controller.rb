@@ -5,7 +5,7 @@ class Api::V1::AuthenticationsController < ApplicationController
         
         if user.save
             token = JsonWebToken.encode(user_id: user.id)
-            render json: {token: token}, status: :created
+            render json: {user: user, token: token}, status: :created
         else
             raise BadRequestError.new(user.errors.full_messages)
         end
@@ -16,7 +16,7 @@ class Api::V1::AuthenticationsController < ApplicationController
 
         if user && user.authenticate(params[:password])
             token = JsonWebToken.encode(user_id: user.id)
-            render json: {token: token}, status: :ok
+            render json: {user: user, token: token}, status: :ok
         else
             raise InvalidCredentialsError
         end
