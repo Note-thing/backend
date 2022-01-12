@@ -1,5 +1,3 @@
-require 'rails/commands/server/server_command'
-
 class PasswordMailer < ApplicationMailer
 
   def new_password_email
