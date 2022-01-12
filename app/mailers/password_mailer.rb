@@ -15,7 +15,7 @@ class PasswordMailer < ApplicationMailer
 
   def get_base_url
     if Rails.env.development?
-      "localhost:" + Rails::Server::Options.new.parse!(ARGV)[:Port].to_s
+      "localhost:3000"
     else
       "note-thing.ch"
     end
