@@ -16,8 +16,15 @@ class Api::V1::FoldersController < ApplicationController
 
   # PUT /api/v1/folder/:id
   def update
-    folder = Folder.find(params[:id])
-    folder.user = logged_in_user
+    begin
+      folder = Folder.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership folder
+
+    folder.user = user
 
     if folder
       if folder.update(folder_params)
@@ -32,7 +39,14 @@ class Api::V1::FoldersController < ApplicationController
 
   # DELETE /api/v1/folders/:id
   def destroy
-    folder = Folder.find(params[:id])
+    begin
+      folder = Folder.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership folder
+
     if folder
       folder.destroy
       render json: {message: "Folder deleted"}, status: :ok
@@ -58,6 +72,13 @@ class Api::V1::FoldersController < ApplicationController
 
   def folder_params
     params.require(:folder).permit(:title)
+  end
+
+  def verify_ownership(folder)
+    user = logged_in_user
+    unless user.own_folder? folder
+      raise BadRequestError.new("user doesn't own folder")
+    end
   end
 
 end

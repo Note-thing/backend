@@ -4,8 +4,7 @@ class ApplicationController < ActionController::API
         token = get_token
 
         if token.nil?
-            render json: { errors: ["Missing le token."] }, status: :forbidden
-            return false
+            raise MissingTokenError
         end
 
         begin
@@ -48,7 +47,7 @@ class ApplicationController < ActionController::API
             return nil
         end
 
-        user = User.find(user_id)
+        User.find(user_id)
     end
 
     def get_token
@@ -73,6 +72,7 @@ class ApplicationController < ActionController::API
                 UnprocessableEntityError, with: :render_error_response
 
     def render_error_response(exception)
+        puts exception.messages
         render json: { messages: exception.messages , code: exception.code }, status: exception.http_status
     end
 
