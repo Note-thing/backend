@@ -1,3 +1,5 @@
+require 'rails/commands/server/server_command'
+
 class PasswordMailer < ApplicationMailer
 
   def new_password_email
@@ -15,7 +17,7 @@ class PasswordMailer < ApplicationMailer
 
   def get_base_url
     if Rails.env.development?
-      "localhost:3000"
+      "localhost:" + Rails::Server::Options.new.parse!(ARGV)[:Port].to_s
     else
       "note-thing.ch"
     end
