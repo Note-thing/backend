@@ -15,12 +15,22 @@ class Api::V1::NotesController < ApplicationController
   # GET /api/v1/notes/:id
   def show
     note = Note.find(params[:id])
+
+    verify_ownership note
+
     render json: note
   end
 
   # POST /api/v1/notes
   def create
+    folder = Folder.find(params[:folder_id])
+    user = logged_in_user
+    unless user.own_folder? folder
+      raise BadRequestError.new("user doesn't own the folder")
+    end
+
     note = Note.new(note_params)
+
     if note.save
       render json: note.to_json(include: :tags), status: :ok
     else
@@ -30,7 +40,25 @@ class Api::V1::NotesController < ApplicationController
 
   # PUT /api/v1/notes/:id
   def update
-    note = Note.find(params[:id])
+    begin
+      note = Note.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership note
+
+    begin
+      folder = Folder.find(params[:folder_id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    user = logged_in_user
+    unless user.own_folder? folder
+      raise BadRequestError.new("user doesn't own the folder")
+    end
+
     if note
       note.update(note_params)
       render json: note
@@ -41,7 +69,14 @@ class Api::V1::NotesController < ApplicationController
 
   # DELETE /api/v1/notes/:id
   def destroy
-    note = Note.find(params[:id])
+    begin
+      note = Note.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership note
+
     if note
       note.destroy
       render json: {message: "Note deleted"}, status: :ok
@@ -50,12 +85,27 @@ class Api::V1::NotesController < ApplicationController
 
   # GET /api/v1/notes/:id/shared_notes
   def get_all_shared_notes_by_note
-    render json: Note.find(params[:id]).shared_notes, status: :ok
+    begin
+      note = Note.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership note
+
+    render json: note.shared_notes, status: :ok
   end
 
   private
 
   def note_params
     params.require(:note).permit(:title, :body, :folder_id)
+  end
+
+  def verify_ownership(note)
+    user = logged_in_user
+    unless user.own_note? note
+      raise BadRequestError.new("user doesn't own the note")
+    end
   end
 end

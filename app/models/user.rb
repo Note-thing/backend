@@ -49,6 +49,14 @@ class User < ApplicationRecord
         save!
     end
 
+    def own_folder?(folder)
+        folder.user.id == self.id
+    end
+
+    def own_note?(note)
+        own_folder? note.folder
+    end
+
     private
 
     def generate_token

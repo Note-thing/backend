@@ -10,7 +10,14 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def show
-    tag = Tag.find(params[:id])
+    begin
+      tag = Tag.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise NotFoundError.new(e.message)
+    end
+
+    verify_ownership tag
+
     render json: tag, status: :ok
   end
 
@@ -19,6 +26,11 @@ class Api::V1::TagsController < ApplicationController
       note = Note.find(params[:note_id])
     rescue ActiveRecord::RecordNotFound => e
       raise NotFoundError.new(e.message)
+    end
+
+    user = logged_in_user
+    unless user.own_note? note
+      raise BadRequestError.new("user doesn't own the note")
     end
 
     tag = Tag.new(note_id: note.id, title: params[:title])
@@ -31,9 +43,23 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def update
-    tag = Tag.find(params[:id])
+    begin
+      tag = Tag.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise NotFoundError.new(e.message)
+    end
+
+    begin
+      Note.find(params[:note_id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise NotFoundError.new(e.message)
+    end
+
+    verify_ownership tag
+
     if tag
-      tag.update(note_params)
+      tag.update(tag_params)
+      verify_ownership tag
       render json: tag
     else
       raise BadRequestError.new("cannot update tag")
@@ -41,7 +67,14 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def destroy
-    tag = Tag.find(params[:id])
+    begin
+      tag = Tag.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise NotFoundError.new(e.message)
+    end
+
+    verify_ownership tag
+
     if tag
       tag.destroy
       render json: {message: "tag deleted"}, status: :ok
@@ -51,7 +84,16 @@ class Api::V1::TagsController < ApplicationController
   private
 
   def tag_params
-    params.require(:tag).permit(:title)
+    params.require(:tag).permit(:title, :note_id)
   end
+
+  def verify_ownership(tag)
+    user = logged_in_user
+
+    unless user.own_note? tag.note
+      raise BadRequestError.new("user doesn't own tag")
+    end
+  end
+
 
 end

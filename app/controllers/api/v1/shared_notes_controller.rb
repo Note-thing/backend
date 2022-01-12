@@ -12,8 +12,11 @@ class Api::V1::SharedNotesController < ApplicationController
 
   # POST /api/v1/shared_notes
   def create
-    # TODO: s'assurer que la note appartient à l'utilisateur connecté
     note = Note.find(params[:id])
+
+    unless logged_in_user.own_note? note
+      raise BadRequestError.new("user doesn't own the note")
+    end
 
     shared_note = SharedNote.new
     shared_note.title = note.title
