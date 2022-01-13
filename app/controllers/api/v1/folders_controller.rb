@@ -24,7 +24,7 @@ class Api::V1::FoldersController < ApplicationController
 
     verify_ownership folder
 
-    folder.user = user
+    folder.user = logged_in_user
 
     if folder
       if folder.update(folder_params)
