@@ -72,7 +72,6 @@ class ApplicationController < ActionController::API
                 UnprocessableEntityError, with: :render_error_response
 
     def render_error_response(exception)
-        puts exception.messages
         render json: { messages: exception.messages , code: exception.code }, status: exception.http_status
     end
 

@@ -23,7 +23,12 @@ class Api::V1::NotesController < ApplicationController
 
   # POST /api/v1/notes
   def create
-    folder = Folder.find(params[:folder_id])
+    begin
+      folder = Folder.find(params[:folder_id])
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
     user = logged_in_user
     unless user.own_folder? folder
       raise BadRequestError.new("user doesn't own the folder")
@@ -48,15 +53,17 @@ class Api::V1::NotesController < ApplicationController
 
     verify_ownership note
 
-    begin
-      folder = Folder.find(params[:folder_id])
-    rescue ActiveRecord::RecordNotFound => e
-      raise BadRequestError.new(e)
-    end
+    if params.has_key?(:folder_id)
+      begin
+        folder = Folder.find(params[:folder_id])
+      rescue ActiveRecord::RecordNotFound => e
+        raise BadRequestError.new(e)
+      end
 
-    user = logged_in_user
-    unless user.own_folder? folder
-      raise BadRequestError.new("user doesn't own the folder")
+      user = logged_in_user
+      unless user.own_folder? folder
+        raise BadRequestError.new("user doesn't own the folder")
+      end
     end
 
     if note
