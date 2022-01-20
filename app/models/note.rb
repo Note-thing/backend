@@ -21,6 +21,12 @@ class Note < ApplicationRecord
     false
   end
 
+  def has_not_been_used_recently
+    if self.reference_note
+      get_parent.updated_at < 1.minute.ago
+    end
+  end
+
   def set_family_to(lock, except = nil)
     child_notes = Note.where(reference_note: self.id)
 

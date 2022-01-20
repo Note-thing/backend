@@ -42,6 +42,11 @@ class Api::V1::NotesController < ApplicationController
       note.set_family_to true
     end
 
+    if note.has_not_been_used_recently
+      note.set_family_to false
+      note.lock = false
+    end
+
 
     if note.reference_note
       note.copy_from_parent
@@ -110,6 +115,9 @@ class Api::V1::NotesController < ApplicationController
     end
 
     if note
+      # https://apidock.com/rails/ActiveRecord/Persistence/touch
+      note.touch
+      puts "1 minute ago", 1.minute.ago
       note.update(note_params)
       render json: note
     else
