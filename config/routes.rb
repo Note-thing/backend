@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :tags
       post '/notes/tag', to: 'notes#addtag'
       resources :notes, only: [:show, :create, :update, :destroy]
+      get 'notes/unlock/:id', to: 'notes#unlock'
       resources :folders, only: [:create, :update, :destroy]
       get '/folders', to: 'folders#get'
 
@@ -16,13 +17,14 @@ Rails.application.routes.draw do
       resources :shared_notes, only: [:show, :create, :destroy]
 
       post '/signin', to: 'authentications#signin'
-
       post '/signup', to: 'authentications#signup'
 
       match '*path', via: [:options], to: lambda {|_| [204, { 'Content-Type' => 'text/plain' }]}
 
       post 'password/forgot', to: 'passwords#forgot'
       post 'password/reset', to: 'passwords#reset'
+
+      put '/users', to: 'users#update'
     end
   end
 end

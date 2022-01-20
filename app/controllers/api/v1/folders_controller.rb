@@ -14,7 +14,7 @@ class Api::V1::FoldersController < ApplicationController
     end
   end
 
-  # PUT /api/v1/folder/:id
+  # PUT /api/v1/folders/:id
   def update
     begin
       folder = Folder.find(params[:id])
@@ -65,7 +65,6 @@ class Api::V1::FoldersController < ApplicationController
     else
       raise NotFoundError.new("user not found")
     end
-
   end
 
   private

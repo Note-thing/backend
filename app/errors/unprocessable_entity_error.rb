@@ -1,6 +1,6 @@
 class UnprocessableEntityError < StandardError
 
-  attr_accessor :memessagesssage
+  attr_accessor :messages
 
   def http_status
     422

@@ -12,16 +12,51 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
-  # GET /api/v1/notes/:id
-  def show
-    note = Note.find(params[:id])
+  def unlock
+    begin
+      note = Note.find(params[:id])
+    rescue  ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
 
     verify_ownership note
 
-    render json: note
+    note.lock = false
+    note.set_family_to(false)
+    note.save
+
+    head :no_content
   end
 
-  # POST /api/v1/notes
+  # GET /api/v1/notes/:id
+  def show
+    begin
+      note = Note.find(params[:id])
+    rescue  ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership note
+
+    unless note.lock
+      note.set_family_to true
+    end
+
+    if note.has_not_been_used_recently
+      note.set_family_to false
+      note.lock = false
+    end
+
+
+    if note.reference_note
+      note.copy_from_parent
+    end
+
+    # render json: {note: note.as_json(except: [:lock])}, status: :ok
+    render json: note, status: :ok
+    end
+
+    # POST /api/v1/notes
   def create
     begin
       folder = Folder.find(params[:folder_id])
@@ -35,6 +70,7 @@ class Api::V1::NotesController < ApplicationController
     end
 
     note = Note.new(note_params)
+    note.lock = false
 
     if note.save
       render json: note.to_json(include: :tags), status: :ok
@@ -53,6 +89,18 @@ class Api::V1::NotesController < ApplicationController
 
     verify_ownership note
 
+    if note.lock
+      raise UnprocessableEntityError.new("note is locked")
+    end
+
+    if note.read_only
+      raise UnprocessableEntityError.new("note is on read only")
+    end
+
+    if note.reference_note and note.read_only == false
+      note.copy_to_parent
+    end
+
     if params.has_key?(:folder_id)
       begin
         folder = Folder.find(params[:folder_id])
@@ -67,6 +115,9 @@ class Api::V1::NotesController < ApplicationController
     end
 
     if note
+      # https://apidock.com/rails/ActiveRecord/Persistence/touch
+      note.touch
+      puts "1 minute ago", 1.minute.ago
       note.update(note_params)
       render json: note
     else
@@ -83,6 +134,13 @@ class Api::V1::NotesController < ApplicationController
     end
 
     verify_ownership note
+
+    if note.lock
+      raise UnprocessableEntityError.new("note is locked, cannot be deleted")
+    end
+
+    note.set_family_to false
+    note.remove_copies
 
     if note
       note.destroy

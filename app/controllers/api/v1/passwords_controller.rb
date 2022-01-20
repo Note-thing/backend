@@ -43,7 +43,7 @@ class Api::V1::PasswordsController < ApplicationController
   def update
     user = logged_in_user
 
-    if !params[:password].present?
+    unless params[:password].present?
       raise UnprocessableEntityError.new("password not present")
     end
 
