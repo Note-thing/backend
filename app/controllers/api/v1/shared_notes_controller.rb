@@ -23,11 +23,15 @@ class Api::V1::SharedNotesController < ApplicationController
     end
 
     unless params[:sharing_type].present?
-      raise UnprocessableEntityError.new("sharing type not present ")
+      raise BadRequestError.new("sharing type not present")
     end
 
     unless SharedNote.share_type.include?(params[:sharing_type])
       raise BadRequestError.new("sharing type not valid")
+    end
+
+    if note.reference_note != nil
+      raise UnprocessableEntityError.new("cannot copy a copied note")
     end
 
     shared_note = SharedNote.new
@@ -61,7 +65,6 @@ class Api::V1::SharedNotesController < ApplicationController
       raise NotFoundError.new("note not found")
     end
 
-
     begin
       folder = Folder.find(params[:folder_id])
     rescue ActiveRecord::RecordNotFound => e
@@ -80,8 +83,7 @@ class Api::V1::SharedNotesController < ApplicationController
     if shared_note.sharing_type == 'copy_content'
       note.title = shared_note.title
       note.body = shared_note.body
-
-    elsif  shared_note.sharing_type == 'read_only'
+    elsif shared_note.sharing_type == 'read_only'
       note.reference_note = shared_note.note_id
       note.read_only = true
     elsif shared_note.sharing_type == 'mirror'

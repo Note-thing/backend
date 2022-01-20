@@ -17,14 +17,17 @@ class Note < ApplicationRecord
         return true
       end
     end
+
     false
   end
 
+
+  # @todo factoriser lock_family et unlock_family
   def lock_family(except = nil)
     child_notes = Note.where(reference_note: self.id)
     child_notes.each do |note|
       if except != nil && note != except
-        note.lock
+        note.lock = true
         note.save
       end
     end
@@ -42,10 +45,13 @@ class Note < ApplicationRecord
     end
   end
 
-  def unlock_family
+  def unlock_family(except = nil)
     child_notes = Note.where(reference_note: self.id)
     child_notes.each do |note|
-      note.lock = false
+      if except != nil && note != except
+        note.lock = false
+        note.save
+      end
     end
 
     if self.reference_note
@@ -57,8 +63,16 @@ class Note < ApplicationRecord
 
       parent.lock = false
       parent.save
-      parent.unlock_family
+      parent.unlock_family(self.id)
     end
+  end
+
+  def remove_copies
+    Note.find_each(reference_note: self.id) do |note|
+      note.reference_note = nil
+      note.save
+    end
+
   end
 
   def copy_from_parent

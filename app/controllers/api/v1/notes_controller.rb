@@ -45,6 +45,7 @@ class Api::V1::NotesController < ApplicationController
     if note.read_only
       note.copy_from_parent
     end
+
     # render json: {note: note.as_json(except: [:lock])}, status: :ok
     render json: note, status: :ok
     end
@@ -82,7 +83,9 @@ class Api::V1::NotesController < ApplicationController
 
     verify_ownership note
 
-    unless note.
+    if note.lock
+      raise UnprocessableEntityError.new("note is locked")
+    end
 
     if params.has_key?(:folder_id)
       begin
@@ -114,6 +117,13 @@ class Api::V1::NotesController < ApplicationController
     end
 
     verify_ownership note
+
+    if note.lock
+      raise UnprocessableEntityError.new("note is locked, cannot be deleted")
+    end
+
+    note.unlock_family
+    note.remove_copies
 
     if note
       note.destroy
