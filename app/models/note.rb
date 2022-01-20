@@ -59,11 +59,16 @@ class Note < ApplicationRecord
       parent.save
       parent.unlock_family
     end
-
   end
 
-
-
-
+  def copy_from_parent
+    begin
+      parent = Note.find(reference_note)
+    rescue ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+    self.title = parent.title
+    self.body = parent.body
+  end
 
 end

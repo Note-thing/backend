@@ -37,12 +37,14 @@ class Api::V1::NotesController < ApplicationController
 
     verify_ownership note
 
-    unless lock.note
-      unless note.lock
-        note.lock_family
-      end
+    unless note.lock
+      note.lock_family
     end
 
+
+    if note.read_only
+      note.copy_from_parent
+    end
     # render json: {note: note.as_json(except: [:lock])}, status: :ok
     render json: note, status: :ok
     end
@@ -79,6 +81,8 @@ class Api::V1::NotesController < ApplicationController
     end
 
     verify_ownership note
+
+    unless note.
 
     if params.has_key?(:folder_id)
       begin
