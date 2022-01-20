@@ -22,7 +22,8 @@ class Api::V1::NotesController < ApplicationController
     verify_ownership note
 
     note.lock = false
-    note.unlock_family
+    note.set_family_to(false)
+    note.save
 
     head :no_content
   end
@@ -38,7 +39,7 @@ class Api::V1::NotesController < ApplicationController
     verify_ownership note
 
     unless note.lock
-      note.lock_family
+      note.set_family_to true
     end
 
 
@@ -122,7 +123,7 @@ class Api::V1::NotesController < ApplicationController
       raise UnprocessableEntityError.new("note is locked, cannot be deleted")
     end
 
-    note.unlock_family
+    note.set_family_to false
     note.remove_copies
 
     if note

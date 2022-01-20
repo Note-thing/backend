@@ -21,36 +21,13 @@ class Note < ApplicationRecord
     false
   end
 
-
-  # @todo factoriser lock_family et unlock_family
-  def lock_family(except = nil)
+  def set_family_to(lock, except = nil)
     child_notes = Note.where(reference_note: self.id)
+
     child_notes.each do |note|
-      if except != nil && note != except
-        note.lock = true
-        note.save
-      end
-    end
-
-    if self.reference_note
-      begin
-      parent = Note.find(reference_note)
-      rescue ActiveRecord::RecordNotFound => e
-        raise BadRequestError.new(e)
-      end
-
-      parent.lock = true
-      parent.save
-      parent.lock_family(self.id)
-    end
-  end
-
-  def unlock_family(except = nil)
-    child_notes = Note.where(reference_note: self.id)
-    child_notes.each do |note|
-      if except != nil && note != except
-        note.lock = false
-        note.save
+      if except == nil || note.id != except
+        note.lock = lock
+        note.save!
       end
     end
 
@@ -61,10 +38,11 @@ class Note < ApplicationRecord
         raise BadRequestError.new(e)
       end
 
-      parent.lock = false
+      parent.lock = lock
       parent.save
-      parent.unlock_family(self.id)
+      parent.set_family_to(lock, self.id)
     end
+
   end
 
   def remove_copies
@@ -72,7 +50,6 @@ class Note < ApplicationRecord
       note.reference_note = nil
       note.save
     end
-
   end
 
   def copy_from_parent

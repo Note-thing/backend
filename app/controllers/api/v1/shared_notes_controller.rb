@@ -57,7 +57,7 @@ class Api::V1::SharedNotesController < ApplicationController
     end
   end
 
-  # GET /api/v1/shared_notes/:uuid/copy
+  # POST /api/v1/shared_notes/:uuid/copy
   def copy
     shared_note = SharedNote.find_by(uuid: params[:uuid])
     unless shared_note
@@ -78,10 +78,10 @@ class Api::V1::SharedNotesController < ApplicationController
 
     note = Note.new
     note.folder_id = params[:folder_id]
+    note.title = shared_note.title
 
     #TODO: faire constante
     if shared_note.sharing_type == 'copy_content'
-      note.title = shared_note.title
       note.body = shared_note.body
     elsif shared_note.sharing_type == 'read_only'
       note.reference_note = shared_note.note_id
