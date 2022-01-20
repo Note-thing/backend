@@ -32,11 +32,7 @@ class Note < ApplicationRecord
     end
 
     if self.reference_note
-      begin
-        parent = Note.find(reference_note)
-      rescue ActiveRecord::RecordNotFound => e
-        raise BadRequestError.new(e)
-      end
+      parent = get_parent
 
       parent.lock = lock
       parent.save
@@ -52,14 +48,30 @@ class Note < ApplicationRecord
     end
   end
 
+  def copy_to_parent
+    parent = get_parent
+    parent.title = self.title
+    parent.body = self.body
+    parent.save!
+  end
+
   def copy_from_parent
+    parent = get_parent
+
+    self.title = parent.title
+    self.body = parent.body
+    save!
+  end
+
+  private
+
+  def get_parent
     begin
-      parent = Note.find(reference_note)
+      return Note.find(self.reference_note)
     rescue ActiveRecord::RecordNotFound => e
       raise BadRequestError.new(e)
     end
-    self.title = parent.title
-    self.body = parent.body
+
   end
 
 end

@@ -43,7 +43,7 @@ class Api::V1::NotesController < ApplicationController
     end
 
 
-    if note.read_only
+    if note.reference_note
       note.copy_from_parent
     end
 
@@ -86,6 +86,14 @@ class Api::V1::NotesController < ApplicationController
 
     if note.lock
       raise UnprocessableEntityError.new("note is locked")
+    end
+
+    if note.read_only
+      raise UnprocessableEntityError.new("note is on read only")
+    end
+
+    if note.reference_note and note.read_only == false
+      note.copy_to_parent
     end
 
     if params.has_key?(:folder_id)
