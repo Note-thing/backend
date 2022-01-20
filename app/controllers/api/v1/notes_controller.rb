@@ -12,16 +12,42 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
-  # GET /api/v1/notes/:id
-  def show
-    note = Note.find(params[:id])
+  def unlock
+    begin
+      note = Note.find(params[:id])
+    rescue  ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
 
     verify_ownership note
 
-    render json: note
+    note.lock = false
+    note.unlock_family
+
+    head :no_content
   end
 
-  # POST /api/v1/notes
+  # GET /api/v1/notes/:id
+  def show
+    begin
+      note = Note.find(params[:id])
+    rescue  ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
+    end
+
+    verify_ownership note
+
+    unless lock.note
+      unless note.lock
+        note.lock_family
+      end
+    end
+
+    # render json: {note: note.as_json(except: [:lock])}, status: :ok
+    render json: note, status: :ok
+    end
+
+    # POST /api/v1/notes
   def create
     begin
       folder = Folder.find(params[:folder_id])
@@ -35,6 +61,7 @@ class Api::V1::NotesController < ApplicationController
     end
 
     note = Note.new(note_params)
+    note.lock = false
 
     if note.save
       render json: note.to_json(include: :tags), status: :ok
