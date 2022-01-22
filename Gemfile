@@ -44,6 +44,9 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rack-cors'
   gem 'spicy-proton'
+
+  gem 'rspec-rails'
+  gem 'shoulda-matchers', '~> 5.0'
 end
 
 group :development do
