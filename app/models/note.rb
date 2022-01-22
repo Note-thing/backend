@@ -48,7 +48,8 @@ class Note < ApplicationRecord
   end
 
   def remove_copies
-    Note.find_each(reference_note: self.id) do |note|
+    child_notes = Note.where(reference_note: self.id)
+    child_notes.each do |note|
       note.reference_note = nil
       note.save
     end

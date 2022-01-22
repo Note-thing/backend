@@ -12,6 +12,7 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
+  # GET /api/v1/unlock/:id
   def unlock
     begin
       note = Note.find(params[:id])
