@@ -12,7 +12,9 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
-  # GET /api/v1/unlock/:id
+
+
+  # GET /api/v1/notes/unlock/:id
   def unlock
     begin
       note = Note.find(params[:id])
@@ -40,24 +42,41 @@ class Api::V1::NotesController < ApplicationController
     verify_ownership note
 
     unless note.lock
-      note.set_family_to true
-      note.touch
+      # nested if => pas incroyable, mais a le mérite de fonctionner
+      unless note.read_only
+        note.set_family_to true
+        #TODO: s'assurer que fonctionne
+        note.touch
+      end
     end
 
     if note.has_not_been_used_recently
       note.set_family_to false
       note.lock = false
+      note.save
     end
-
 
     if note.reference_note
       note.copy_from_parent
     end
 
-
     # render json: {note: note.as_json(except: [:lock])}, status: :ok
     render json: note, status: :ok
+  end
+
+  # GET /api/v1/notes/read_only/:id
+  def read_only
+    begin
+      note = Note.find(params[:id])
+    rescue  ActiveRecord::RecordNotFound => e
+      raise BadRequestError.new(e)
     end
+
+    note.lock = true
+    # ! do not save !
+
+    render json: note, status: :ok
+  end
 
     # POST /api/v1/notes
   def create

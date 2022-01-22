@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       post '/notes/tag', to: 'notes#addtag'
       resources :notes, only: [:show, :create, :update, :destroy]
       get 'notes/unlock/:id', to: 'notes#unlock'
+      get 'notes/read_only/:id', to: 'notes#read_only'
       resources :folders, only: [:create, :update, :destroy]
       get '/folders', to: 'folders#get'
 
