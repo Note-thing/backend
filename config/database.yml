@@ -10,10 +10,9 @@ default: &default
 
 development:
   <<: *default
-  database: app
-  username: user
-  password: password
-  host: db
+  database: app_ci
+  username: root
+  password: root
 
 test:
   <<: *default
