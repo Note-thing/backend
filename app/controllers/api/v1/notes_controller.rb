@@ -98,10 +98,6 @@ class Api::V1::NotesController < ApplicationController
       raise UnprocessableEntityError.new("note is on read only")
     end
 
-    if note.reference_note and note.read_only == false
-      note.copy_to_parent
-    end
-
     if params.has_key?(:folder_id)
       begin
         folder = Folder.find(params[:folder_id])
@@ -118,8 +114,12 @@ class Api::V1::NotesController < ApplicationController
     if note
       # https://apidock.com/rails/ActiveRecord/Persistence/touch
       note.touch
-      puts "1 minute ago", 1.minute.ago
       note.update(note_params)
+
+      if note.reference_note and note.read_only == false
+        note.copy_to_parent
+      end
+
       render json: note
     else
       raise BadRequestError.new("unable to update note")
