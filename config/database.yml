@@ -17,11 +17,9 @@ development:
 
 test:
   <<: *default
-  database: app_test
+  database: app_ci
   username: root
-  password: password
-  host: 127.0.0.1
-  port: 3307
+  password: root
   #host: db
 
 production:
