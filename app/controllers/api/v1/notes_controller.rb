@@ -53,6 +53,8 @@ class Api::V1::NotesController < ApplicationController
       note.copy_from_parent
     end
 
+    note.touch
+
     # render json: {note: note.as_json(except: [:lock])}, status: :ok
     render json: note, status: :ok
     end
