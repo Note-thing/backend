@@ -43,7 +43,7 @@ jobs:
           DB_PORT: 3306
           DB_NAME: app_ci
           DB_USER: root
-          DB_PASSWORD: root
+          DB_PASSWORD: password
           DB_HOST: 127.0.0.1
         run: |
           bin/rails db:create
