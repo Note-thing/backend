@@ -45,7 +45,7 @@ jobs:
           DB_USER: root
           DB_PASSWORD: password
           DB_HOST: 127.0.0.1
-          JWT_SECRET: ${{JWT_SECRET}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
         run: |
           bin/rails db:create
           bin/rails db:schema:load
