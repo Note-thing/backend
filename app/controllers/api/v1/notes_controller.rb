@@ -41,6 +41,7 @@ class Api::V1::NotesController < ApplicationController
 
     unless note.lock
       note.set_family_to true
+      note.touch
     end
 
     if note.has_not_been_used_recently
@@ -53,7 +54,6 @@ class Api::V1::NotesController < ApplicationController
       note.copy_from_parent
     end
 
-    note.touch
 
     # render json: {note: note.as_json(except: [:lock])}, status: :ok
     render json: note, status: :ok
