@@ -27,9 +27,17 @@ class Note < ApplicationRecord
     end
   end
 
+  def update_children
+    child_notes = Note.where(reference_note: self.id)
+    child_notes.each do |note|
+      note.title = self.title
+      note.body = self.body
+      note.save!
+    end
+  end
+
   def set_family_to(lock, except = nil)
     child_notes = Note.where(reference_note: self.id)
-
     child_notes.each do |note|
       if except == nil || note.id != except
         note.lock = lock
@@ -67,7 +75,7 @@ class Note < ApplicationRecord
 
     self.title = parent.title
     self.body = parent.body
-    save!
+    self.save!
   end
 
   private
