@@ -52,8 +52,70 @@ RSpec.describe "note controller", type: :request do
   end
 
   it "should delete a note with valid parameters" do
-
+    headers = { "token" => @token }
+    delete "/api/v1/notes/#{@note.id}", headers: headers
+    response.status.should == 200
   end
+
+  it "should not delete a note without valid parameters" do
+    headers = { "token" => @token }
+    delete "/api/v1/notes/#{@note.id - 1}", headers: headers
+    response.status.should == 400
+  end
+
+  it "should not delete a locked note" do
+    note = Note.create(title:"notetitle2", body:"todestroy", folder:@folder, lock:true)
+    headers = { "token" => @token }
+    delete "/api/v1/notes/#{note.id}", headers: headers
+    response.status.should == 422
+  end
+
+  it "should update a note" do
+    hash = {title: "title1", body:"body--modified", folder_id:@folder.id}
+    headers = { "token" => @token, "CONTENT_TYPE" => "application/json" }
+    put "/api/v1/notes/#{@note.id}", params: hash.to_json, headers: headers
+    response.status.should == 200
+    assert Note.find(@note.id).body == "body--modified"
+  end
+
+  it "should note update a locked note" do
+    @note.lock = true
+    @note.save
+    hash = {title: "title1", body:"body--modified2", folder_id:@folder.id}
+    headers = { "token" => @token, "CONTENT_TYPE" => "application/json" }
+    put "/api/v1/notes/#{@note.id}", params: hash.to_json, headers: headers
+    response.status.should == 422
+    assert Note.find(@note.id).body != "body--modified2"
+    @note.lock = false
+    @note.save
+  end
+
+  it "should note update a read-only note" do
+    @note.read_only = true
+    @note.save
+    hash = {title: "title1", body:"body--modified2", folder_id:@folder.id}
+    headers = { "token" => @token, "CONTENT_TYPE" => "application/json" }
+    put "/api/v1/notes/#{@note.id}", params: hash.to_json, headers: headers
+    response.status.should == 422
+    assert Note.find(@note.id).body != "body--modified2"
+    @note.read_only = false
+    @note.save
+  end
+
+  it "should unlock the note" do
+    @note.lock = true
+    @note.save
+    headers = { "token" => @token }
+    get "/api/v1/notes/unlock/#{@note.id}", headers: headers
+    response.status.should == 204
+    assert Note.find(@note.id).lock == false
+    @note.lock = false
+    @note.save
+  end
+
+
+
+
 
 
 
