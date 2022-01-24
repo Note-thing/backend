@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+
+
+pid = Process.spawn("db:reset db:migrate && bundle exec rails s -e production") # run the server and get its PID
+sleep 5 # time in seconds you need to ensure the server boots without errors
+Process.kill("INT", pid) # send ^C, gracefully terminate the server
+
+_, status = Process.wait2(pid) # wait for the server termination and get its exit code
+exit status.exitstatus # exit from the script with the same code as the server
