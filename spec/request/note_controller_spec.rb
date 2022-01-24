@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "note controller", type: :request do
   before do
-    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini")
+    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini", email_validated: true)
     @folder = Folder.new(user: @user, title: "test folder")
     @note = Note.create(title:"notetitle1", body:"body", folder:@folder)
     valid_credentials = { email: "aaa@aa.aa",  password: "123456"}

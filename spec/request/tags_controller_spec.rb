@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "tags controller", type: :request do
   before do
-    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini")
+    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini", email_validated: true)
     @folder = Folder.create(user: @user, title: "test folder")
     valid_credentials = { email: "aaa@aa.aa",  password: "123456"}
     @note = Note.create(title:"notetitle1", body:"body", folder:@folder)

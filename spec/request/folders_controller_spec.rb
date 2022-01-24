@@ -2,20 +2,22 @@ require "rails_helper"
 
 RSpec.describe "folders controller", type: :request do
   before do
-    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini")
+    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini", email_validated: true)
     @folder = Folder.create(user: @user, title: "test folder")
     @note = Note.create(title:"notetitle1", body:"body", folder:@folder)
     valid_credentials = { email: "aaa@aa.aa",  password: "123456"}
     post '/api/v1/signin', params: valid_credentials
     @token = JSON.parse(response.body)["token"]
+    puts "BODY", response.body
+    puts "TOKEN", @token
     @token_headers = { "token" => @token}
     @modify_headers = { "token" => @token, "CONTENT_TYPE" => "application/json"}
   end
 
   it "should return all our folders" do
     get '/api/v1/folders', headers: @token_headers
+    puts "ERROR:", response.body
     response.status.should == 200
-    puts response.body
     folders = JSON.parse(response.body)
     assert folders[0]["id"] == @folder.id
   end
