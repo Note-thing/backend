@@ -32,6 +32,8 @@ jobs:
           DB_HOST: 127.0.0.1
           SECRET_KEY_BASE: ${{secrets.MASTER_KEY}}
         run: |
+          touch config/master.key
+          echo "${{secrets.MASTER_KEY}}" >> config/master.key
           echo "" >> config/database.yml
           echo "production:" >> config/database.yml
           echo "  secret_key_base: ${{secrets.MASTER_KEY}}" >> config/database.yml
