@@ -79,14 +79,12 @@ class Api::V1::SharedNotesController < ApplicationController
     note = Note.new
     note.folder_id = params[:folder_id]
     note.title = shared_note.title
+    note.body = shared_note.body
 
-    #TODO: faire constante
-    if shared_note.sharing_type == 'copy_content'
-      note.body = shared_note.body
-    elsif shared_note.sharing_type == 'read_only'
+    if shared_note.sharing_type == SharedNote::READ_ONLY
       note.reference_note = shared_note.note_id
       note.read_only = true
-    elsif shared_note.sharing_type == 'mirror'
+    elsif shared_note.sharing_type == SharedNote::MIRROR
       note.reference_note = shared_note.note_id
       note.read_only = false
     else

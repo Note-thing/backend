@@ -34,7 +34,7 @@ class User < ApplicationRecord
         self.reset_password_token = token
         self.reset_password_sent_at = Time.now.utc
         self.password_digest = current_password
-        # Sans validate: false, la validation de password ne fonctione plus.. 🤔
+        # Sans validate: false, la validation de password ne fonctionne plus.. 🤔
         save!(validate: false)
         token
     end
@@ -52,7 +52,7 @@ class User < ApplicationRecord
     end
 
     def email_token_valid?(email_token)
-        ((self.reset_password_sent_at + 10.days) > Time.now.utc) && (email_token == self.validation_token_email)
+        ((self.validation_token_email_sent_at + 10.days) > Time.now.utc) && (email_token == self.validation_token_email)
     end
 
     def reset_password!(password)

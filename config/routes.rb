@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       # devise_for :users, controllers: { registrations: 'registratins' }
 
       patch '/users', to: 'users#update'
-      put '/users/validate', to: 'users#validate_email'
+      post '/users/validate', to: 'users#validate_email'
 
 
     end

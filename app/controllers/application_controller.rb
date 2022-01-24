@@ -17,7 +17,11 @@ class ApplicationController < ActionController::API
 
         user_id = decode_data["user_id"] if decode_data
 
-        user = User.find(Integer(user_id))
+        begin
+            user = User.find(Integer(user_id))
+        rescue ActiveRecord::RecordNotFound => e
+            raise NotFoundError.new(e.message)
+        end
 
         if user
             true
@@ -47,7 +51,13 @@ class ApplicationController < ActionController::API
             return nil
         end
 
-        User.find(user_id)
+        begin
+            user = User.find(user_id)
+        rescue ActiveRecord::RecordNotFound => e
+            raise NotFoundError.new(e.message)
+        end
+
+        user
     end
 
     def get_token

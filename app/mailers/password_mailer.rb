@@ -10,7 +10,7 @@ class PasswordMailer < ApplicationMailer
   end
 
   def generate_reset_link
-    get_base_url + "?token=" + @token
+    get_base_url + "/change_password"+ "?token=" + @token
   end
 
 end

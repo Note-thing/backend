@@ -23,11 +23,7 @@ class Api::V1::PasswordsController < ApplicationController
   def reset
     token = params[:password_token].to_s
 
-    begin
-      user = User.find_by(reset_password_token: token)
-    rescue ActiveRecord::RecordNotFound => e
-      raise BadRequestError.new(e)
-    end
+    user = User.find_by(reset_password_token: token)
 
     if user.present? && user.password_token_valid?(token)
       if user.reset_password!(params[:password])

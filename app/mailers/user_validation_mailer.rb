@@ -15,7 +15,7 @@ class UserValidationMailer < ApplicationMailer
   end
 
   def generate_validate_link
-    get_base_url + "?token=" + @token
+    get_base_url + "/validate_account"+ "?token=" + @token
   end
 
 end
