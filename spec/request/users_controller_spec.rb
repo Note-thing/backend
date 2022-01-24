@@ -10,7 +10,7 @@ RSpec.describe "users controller", type: :request do
   end
   it "should change user data" do
     hash = { email: 'bbb@bbb.bb', firstname: 'paul', lastname: 'gauthier' }
-    put '/api/v1/users', headers: @token_headers, params: hash.to_json
+    patch '/api/v1/users', headers: @token_headers, params: hash.to_json
     puts response.body
     response.status.should == 200
   end
