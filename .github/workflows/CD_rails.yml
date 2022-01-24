@@ -32,6 +32,8 @@ jobs:
           DB_HOST: 127.0.0.1
           SECRET_KEY_BASE: ${{secrets.MASTER_KEY}}
         run: |
+          touch config/master.key
+          echo "${{secrets.MASTER_KEY}}" >> config/master.key
           echo "" >> config/database.yml
           echo "production:" >> config/database.yml
           echo "  secret_key_base: ${{secrets.MASTER_KEY}}" >> config/database.yml
@@ -56,11 +58,6 @@ jobs:
       - name: Copy app files to AWS
         run : rsync -rave "ssh -o StrictHostKeyChecking=no -i SSH.pem" ./ ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com:/home/ubuntu/backend
 
-      - name: Make Boot Rails executable
-        run: chmod u+x bin/test_boot
-
-      - name: Boot Rails server
-        run: bin/test_boot
-      #- name: Execute script on server
-      #  run: sudo ssh -o StrictHostKeyChecking=no -T ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com -i "SSH.pem" " chmod 777 ./backend/scripts/script.sh && ./backend/scripts/script.sh &"
+      - name: Execute script on server
+        run: sudo ssh -o StrictHostKeyChecking=no -T ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com -i "SSH.pem" " chmod 777 ./backend/scripts/script.sh && ./backend/scripts/script.sh &"
    
