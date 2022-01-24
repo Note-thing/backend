@@ -57,7 +57,7 @@ jobs:
         run : rsync -rave "ssh -o StrictHostKeyChecking=no -i SSH.pem" ./ ubuntu@ec2-3-69-174-49.eu-central-1.compute.amazonaws.com:/home/ubuntu/backend
 
       - name: Make Boot Rails executable
-        run: cmod u+x bin/test_boot
+        run: chmod u+x bin/test_boot
 
       - name: Boot Rails server
         run: bin/test_boot
