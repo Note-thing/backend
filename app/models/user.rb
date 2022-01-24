@@ -12,10 +12,12 @@ class User < ApplicationRecord
     validates :password,
               presence: true,
               confirmation: true,
-              length: { minimum: 6 }
+              length: { minimum: 6 },
+              if: lambda {self.password.present?}
 
     validates :password_confirmation,
-              presence: true
+              presence: true,
+              if: lambda {self.password.present?}
 
     validates :firstname,
               format: { with: VALID_NAME_REGEX, message: "incorrect, évitez les caractères spéciaux et les chiffres" },
@@ -32,14 +34,25 @@ class User < ApplicationRecord
         self.reset_password_token = token
         self.reset_password_sent_at = Time.now.utc
         self.password_digest = current_password
-        # TODO: sans validate: false la validation de password ne fonctione plus.. 🤔
+        # Sans validate: false, la validation de password ne fonctione plus.. 🤔
         save!(validate: false)
         token
     end
 
+    def generate_validation_token!
+        token = generate_token
+        self.validation_token_email = token
+        self.validation_token_email_sent_at = Time.now.utc
+        save!
+        token
+    end
+
     def password_token_valid?(password_token)
-        puts password_token, self.reset_password_token
         ((self.reset_password_sent_at + 4.hours) > Time.now.utc) && (password_token == self.reset_password_token)
+    end
+
+    def email_token_valid?(email_token)
+        ((self.reset_password_sent_at + 10.days) > Time.now.utc) && (email_token == self.validation_token_email)
     end
 
     def reset_password!(password)

@@ -25,7 +25,12 @@ Rails.application.routes.draw do
       post 'password/forgot', to: 'passwords#forgot'
       post 'password/reset', to: 'passwords#reset'
 
-      put '/users', to: 'users#update'
+      # devise_for :users, controllers: { registrations: 'registratins' }
+
+      patch '/users', to: 'users#update'
+      put '/users/validate', to: 'users#validate_email'
+
+
     end
   end
 end

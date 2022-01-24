@@ -4,20 +4,13 @@ class PasswordMailer < ApplicationMailer
     @user = params[:user]
     @token = params[:token]
 
-    @reset_link = generate_reset_link
+    @link = generate_reset_link
 
-    mail(to: @user.email, subject: "Reset your email on note thing")
+    mail(to: @user.email, subject: "Changement de mot de passe sur note-thing.ch")
   end
 
   def generate_reset_link
     get_base_url + "?token=" + @token
   end
 
-  def get_base_url
-    if Rails.env.development?
-      "localhost:3000"
-    else
-      "note-thing.ch"
-    end
-  end
 end
