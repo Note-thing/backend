@@ -88,8 +88,10 @@ class Api::V1::SharedNotesController < ApplicationController
       note.reference_note = shared_note.note_id
       note.read_only = false
     else
-      shared_note.destroy
-      raise UnprocessableEntityError.new("Failed to create note from shared note")
+      unless SharedNote.share_type.include?(shared_note.sharing_type)
+        shared_note.destroy
+        raise UnprocessableEntityError.new("Failed to create note from shared note")
+      end
     end
 
     note.lock = false
