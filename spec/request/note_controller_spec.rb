@@ -112,7 +112,11 @@ RSpec.describe "note controller", type: :request do
     @note.lock = false
     @note.save
   end
-
+  it "should display the structure" do
+    get '/api/v1/structure', headers: @token_headers
+    structure = JSON.parse(response.body)
+    response.status.should == 200
+  end
 
 
 
