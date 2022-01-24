@@ -39,18 +39,22 @@ class Api::V1::NotesController < ApplicationController
 
     verify_ownership note
 
-    unless note.lock
-      # nested if => pas incroyable, mais a le mérite de fonctionner
-      unless note.read_only
-        note.set_family_to true
-        note.touch
+    unless note.read_only
+      unless note.lock
+        # nested if => pas incroyable, mais a le mérite de fonctionner
+        unless note.read_only
+          note.set_family_to true
+          note.touch
+        end
       end
     end
 
-    if note.has_not_been_used_recently
-      note.set_family_to true
-      note.lock = false
-      note.save
+    unless note.read_only
+      if note.has_not_been_used_recently
+        note.set_family_to true
+        note.lock = false
+        note.save
+      end
     end
 
     #if note.reference_note
