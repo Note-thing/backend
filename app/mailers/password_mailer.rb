@@ -1,5 +1,7 @@
 class PasswordMailer < ApplicationMailer
 
+  layout false
+
   def new_password_email
     @user = params[:user]
     @token = params[:token]
