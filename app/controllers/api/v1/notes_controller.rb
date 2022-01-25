@@ -63,7 +63,7 @@ class Api::V1::NotesController < ApplicationController
     #end
 
     # render json: {note: note.as_json(except: [:lock])}, status: :ok
-    render json: note, status: :ok
+    render json: note.to_json(include: :tags), status: :ok
   end
 
   # GET /api/v1/notes/read_only/:id
@@ -77,7 +77,7 @@ class Api::V1::NotesController < ApplicationController
     note.lock = true
     # ! do not save !
 
-    render json: note, status: :ok
+    render json: note.to_json(include: :tags), status: :ok
   end
 
     # POST /api/v1/notes
@@ -145,7 +145,7 @@ class Api::V1::NotesController < ApplicationController
 
       note.update_children
 
-      render json: note
+      render json: note.to_json(include: :tags), status: :ok
     else
       raise BadRequestError.new("unable to update note")
     end
