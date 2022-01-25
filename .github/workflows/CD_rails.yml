@@ -32,10 +32,10 @@ jobs:
           DB_HOST: 127.0.0.1
           SECRET_KEY_BASE: ${{secrets.MASTER_KEY}}
         run: |
-          touch .env
-          echo "JWT_SECRET='yomama'" >> .env
-          echo "EMAIL='notething69@gmail.com'
-          echo "EMAIL_PASSWORD='nvfRbCX8FXLdtra'
+          sudo touch /.env
+          echo "JWT_SECRET='${{secrets.JWT_SECRET}}'" >> .env
+          echo "EMAIL='${{secrets.EMAIL}}'
+          echo "EMAIL_PASSWORD='${{secrets.EMAIL_PASSWORD}}'
           touch config/master.key
           echo "${{secrets.MASTER_KEY}}" >> config/master.key
           echo "" >> config/database.yml
