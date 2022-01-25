@@ -83,6 +83,9 @@ class Note < ApplicationRecord
     child_notes = Note.where(reference_note: self.id)
     child_notes.each do |note|
       note.reference_note = nil
+      if note.read_only
+        note.read_only = false
+      end
       note.save
     end
   end
