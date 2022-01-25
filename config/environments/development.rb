@@ -35,7 +35,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
 
@@ -61,7 +61,23 @@ Rails.application.configure do
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
-  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # https://github.com/evilmartians/terraforming-rails/issues/34 
+  # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.debug_exception_response_format = :api
+  #config.eager_load = true
+
+  #config.reload_classes_only_on_change = false
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'gmail.com',
+    user_name:            ENV["EMAIL"],
+    password:             ENV["EMAIL_PASSWORD"],
+    authentication:       'plain'
+  }
+
 end

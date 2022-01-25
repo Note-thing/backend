@@ -1,5 +1,9 @@
 name: ci rails
-on: [push, pull_request]
+on:
+  pull_request:
+    branches: [deploy]
+  push:
+    branches: [main, deploy, test]
 
 jobs:
   test:
@@ -20,10 +24,9 @@ jobs:
           --health-retries=3
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ruby 2.7
-        uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: 2.7.4
 
       - name: Install dependencies
         run: |
@@ -40,10 +43,13 @@ jobs:
           DB_PORT: 3306
           DB_NAME: app_ci
           DB_USER: root
-          DB_PASSWORD: root
+          DB_PASSWORD: password
           DB_HOST: 127.0.0.1
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          EMAIL: ${{secrets.EMAIL}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
         run: |
           bin/rails db:create
           bin/rails db:schema:load
           bin/rails db:migrate
-          bin/rails test
+          rspec
