@@ -21,10 +21,31 @@ class Note < ApplicationRecord
     false
   end
 
-  def has_not_been_used_recently
+  def has_parent_not_been_used_recently
     if self.reference_note
       get_parent.updated_at < 1.minute.ago
     end
+  end
+
+  def has_been_used_frequently(note)
+    note.updated_at > 1.minute.ago
+  end
+
+  def has_family_been_used_recently
+    if self.reference_note
+      if has_been_used_frequently get_parent
+        return true
+      end
+    end
+
+    child_notes = Note.where(reference_note: self.id)
+    child_notes.each do |note|
+      if note.lock and has_been_used_frequently(note)
+        return true
+      end
+    end
+
+    false
   end
 
   def update_children

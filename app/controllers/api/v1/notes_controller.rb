@@ -45,12 +45,13 @@ class Api::V1::NotesController < ApplicationController
         unless note.read_only
           note.set_family_to true
           note.touch
+          note.save
         end
       end
     end
 
     unless note.read_only
-      if note.has_not_been_used_recently
+      unless note.has_family_been_used_recently
         note.set_family_to true
         note.lock = false
         note.save
@@ -166,6 +167,7 @@ class Api::V1::NotesController < ApplicationController
 
     note.set_family_to false
     note.remove_mirror_to_family
+
     note.remove_copies
 
     if note
