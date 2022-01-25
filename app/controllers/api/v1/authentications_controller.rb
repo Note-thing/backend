@@ -8,7 +8,13 @@ class Api::V1::AuthenticationsController < ApplicationController
 
         if user.save
             token = JsonWebToken.encode(user_id: user.id)
-            render json: {user: user.as_json(except: [:password_digest, :reset_password_token, :reset_password_sent_at]), token: token}, status: :created
+            render json: {user: user.as_json(except: [
+              :password_digest,
+              :reset_password_token,
+              :reset_password_sent_at,
+              :validation_token_email,
+              :validation_token_email_sent_at
+            ]), token: token}, status: :created
         else
             raise BadRequestError.new(user.errors.full_messages)
         end
@@ -27,7 +33,13 @@ class Api::V1::AuthenticationsController < ApplicationController
 
         if user.authenticate(params[:password])
             token = JsonWebToken.encode(user_id: user.id)
-            render json: {user: user, token: token}, status: :ok
+            render json: {user: user.as_json(except: [
+              :password_digest,
+              :reset_password_token,
+              :reset_password_sent_at,
+              :validation_token_email,
+              :validation_token_email_sent_at
+            ]), token: token}, status: :ok
         else
             raise InvalidCredentialsError
         end

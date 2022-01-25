@@ -32,7 +32,7 @@ class Note < ApplicationRecord
     child_notes.each do |note|
       note.title = self.title
       note.body = self.body
-      note.save!
+      note.save
     end
   end
 
@@ -41,7 +41,7 @@ class Note < ApplicationRecord
     child_notes.each do |note|
       if except == nil || note.id != except
         note.lock = lock
-        note.save!
+        note.save
       end
     end
 
@@ -52,13 +52,40 @@ class Note < ApplicationRecord
       parent.save
       parent.set_family_to(lock, self.id)
     end
+  end
 
+  def remove_mirror_to_family
+    child_notes = Note.where(reference_note: self.id)
+    child_notes.each do |note|
+      if note.has_mirror
+        note.has_mirror = false
+        note.save
+      end
+    end
+
+    # Ok alors là c'est plus délicat..
+    # On doit vérifier si le parent n'a pas d'autre notes partagées en mirror avant de r
+    if self.reference_note
+      parent = get_parent
+      siblings = Note.where(reference_note: parent.id)
+      p siblings.length, "sibling length"
+      siblings.each do |note|
+        if note.id != self.id and note.has_mirror
+          return
+        end
+      end
+      parent.has_mirror = false
+      parent.save
+    end
   end
 
   def remove_copies
     child_notes = Note.where(reference_note: self.id)
     child_notes.each do |note|
       note.reference_note = nil
+      if note.read_only
+        note.read_only = false
+      end
       note.save
     end
   end

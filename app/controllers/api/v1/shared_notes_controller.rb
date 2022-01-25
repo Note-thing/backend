@@ -87,9 +87,26 @@ class Api::V1::SharedNotesController < ApplicationController
     elsif shared_note.sharing_type == SharedNote::MIRROR
       note.reference_note = shared_note.note_id
       note.read_only = false
+      note.has_mirror = true
+
+      begin
+        parent = Note.find(shared_note.note_id)
+      rescue ActiveRecord::RecordNotFound
+        raise BadRequestError.new("unable to find parent")
+      end
+      parent.has_mirror = true
+      unless parent.save
+        raise BadRequestError.new("Unable to update parent")
+      end
+
+
+    elsif shared_note.sharing_type == SharedNote::COPY_CONTENT
+      note.read_only = false
     else
-      shared_note.destroy
-      raise UnprocessableEntityError.new("Failed to create note from shared note")
+      unless SharedNote.share_type.include?(shared_note.sharing_type)
+        shared_note.destroy
+        raise UnprocessableEntityError.new("Failed to create note from shared note")
+      end
     end
 
     note.lock = false

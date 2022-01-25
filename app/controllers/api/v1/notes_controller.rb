@@ -165,6 +165,7 @@ class Api::V1::NotesController < ApplicationController
     end
 
     note.set_family_to false
+    note.remove_mirror_to_family
     note.remove_copies
 
     if note
