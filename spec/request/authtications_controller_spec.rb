@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "folders controller", type: :request do
+RSpec.describe "authentication controller", type: :request do
   before do
-    @user = User.create(email: "noahfusi@gmail.com", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini", email_validated: true)
+    @user = User.create(email: "aaa@aa.aa", password: "123456", password_confirmation: "123456", firstname: "pierre", lastname: "donini", email_validated: true)
   end
 
 
