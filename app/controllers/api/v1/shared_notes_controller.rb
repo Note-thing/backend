@@ -80,6 +80,7 @@ class Api::V1::SharedNotesController < ApplicationController
     note.folder_id = params[:folder_id]
     note.title = shared_note.title
     note.body = shared_note.body
+    note.lock = false
 
     if shared_note.sharing_type == SharedNote::READ_ONLY
       note.reference_note = shared_note.note_id
@@ -88,6 +89,7 @@ class Api::V1::SharedNotesController < ApplicationController
       note.reference_note = shared_note.note_id
       note.read_only = false
       note.has_mirror = true
+      note.lock = true
 
       begin
         parent = Note.find(shared_note.note_id)
@@ -109,7 +111,6 @@ class Api::V1::SharedNotesController < ApplicationController
       end
     end
 
-    note.lock = false
 
     if note.save
       shared_note.destroy
