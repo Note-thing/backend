@@ -97,7 +97,9 @@ RSpec.describe "shared note controller", type: :request do
     puts "MIRROR NOTE", response.body
     new_note = JSON.parse(response.body)
     assert new_note['body'] == 'body--modified'
-    assert new_note['locked'] == 'true'
+    puts "PARENT NOTE", Note.find(note.id).lock
+    assert Note.find(note.id).lock == true
+    assert Note.find(note.id).has_mirror == true
   end
 
   it 'should copy a shared note (read_only)' do
@@ -131,6 +133,10 @@ RSpec.describe "shared note controller", type: :request do
     puts "CHILDREN NOTE", response.body
     new_note = JSON.parse(response.body)
     assert new_note['body'] == 'body--modified'
+
+    puts "PARENT NOTE", Note.find(note.id).lock
+    assert Note.find(note.id).lock == nil
+    assert Note.find(note.id).has_mirror == false
   end
 
 end
