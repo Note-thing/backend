@@ -56,6 +56,15 @@ RSpec.describe "shared note controller", type: :request do
     response.status.should == 200
     new_note = JSON.parse(response.body)
     assert Folder.find(@folder.id).notes.find(new_note['id'])
+
+    note.body = 'new body'
+    note.save
+
+    get "/api/v1/notes/#{new_note['id']}", headers: @token_headers
+    response.status.should == 200
+    puts "CHILDREN NOTE", response.body
+    new_note = JSON.parse(response.body)
+    assert new_note['body'] != 'new body'
   end
 
   it 'should copy a shared note (mirror)' do
@@ -63,6 +72,12 @@ RSpec.describe "shared note controller", type: :request do
     folder = Folder.new(user: user, title: "other folder")
     note = Note.create(title:"notetitle1", body:"body", folder:folder)
     uuid = SecureRandom.uuid
+    valid_credentials =  { email:'bbb@bb.bb', password: '123456'}
+    post '/api/v1/signin', params: valid_credentials
+    token = JSON.parse(response.body)["token"]
+    token_headers = { "token" => @token }
+    modify_headers = { 'token' => token, 'CONTENT_TYPE' => 'application/json' }
+
     shared_note = SharedNote.create(title: note.title, body: note.body, note_id: note.id, sharing_type: 'mirror', uuid: uuid)
 
     hash = {folder_id: @folder.id}
@@ -73,13 +88,16 @@ RSpec.describe "shared note controller", type: :request do
     assert Note.find(new_note['id']).reference_note != nil
     assert Note.find(new_note['id']).read_only == false
 
-    note.body = 'new body'
-    note.save
+    hash = {title: "title1", body:"body--modified", folder_id:folder.id}
+    put "/api/v1/notes/#{note.id}", params: hash.to_json, headers: modify_headers
+    response.status.should == 200
 
     get "/api/v1/notes/#{new_note['id']}", headers: @token_headers
     response.status.should == 200
-    puts "CHILDREN NOTE", response.body
-
+    puts "MIRROR NOTE", response.body
+    new_note = JSON.parse(response.body)
+    assert new_note['body'] == 'body--modified'
+    assert new_note['locked'] == 'true'
   end
 
   it 'should copy a shared note (read_only)' do
@@ -87,6 +105,13 @@ RSpec.describe "shared note controller", type: :request do
     folder = Folder.new(user: user, title: "other folder")
     note = Note.create(title:"notetitle1", body:"body", folder:folder)
     uuid = SecureRandom.uuid
+
+    valid_credentials =  { email:'bbb@bb.bb', password: '123456'}
+    post '/api/v1/signin', params: valid_credentials
+    token = JSON.parse(response.body)["token"]
+    token_headers = { "token" => @token }
+    modify_headers = { 'token' => token, 'CONTENT_TYPE' => 'application/json' }
+
     shared_note = SharedNote.create(title: note.title, body: note.body, note_id: note.id, sharing_type: 'read_only', uuid: uuid)
 
     hash = {folder_id: @folder.id}
@@ -96,6 +121,16 @@ RSpec.describe "shared note controller", type: :request do
     assert Folder.find(@folder.id).notes.find(new_note['id'])
     assert Note.find(new_note['id']).reference_note != nil
     assert Note.find(new_note['id']).read_only == true
+
+    hash = {title: "title1", body:"body--modified", folder_id:folder.id}
+    put "/api/v1/notes/#{note.id}", params: hash.to_json, headers: modify_headers
+    response.status.should == 200
+
+    get "/api/v1/notes/#{new_note['id']}", headers: @token_headers
+    response.status.should == 200
+    puts "CHILDREN NOTE", response.body
+    new_note = JSON.parse(response.body)
+    assert new_note['body'] == 'body--modified'
   end
 
 end
