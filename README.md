@@ -65,6 +65,11 @@ rails s
 rake routes
 ```
 
+**Lancer les tests**
+```bash
+rails spec
+```
+
 ## Considérations techniques
 Vous trouverez sur notre wiki les éléments suivants : 
 - [les endpoints de l'API](https://github.com/Note-thing/backend/wiki/Mod%C3%A8le-de-domaine)
