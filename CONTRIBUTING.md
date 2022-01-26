@@ -1,5 +1,5 @@
 # Guide de contribution
-## Vous souhaitez apporter votre pierre à l'édifice ?
+## Vous souhaitez apporter votre pierre à l'édifice ? 👀
 Rien de plus simple ! Voici en quelques étapes comment participer au projet :
 1. Faites un fork de ce repository
 2. Ouvrir une [issue](https://github.com/Note-thing/backend/issues) expliquant ce que vous-voulez améliorer / fixer ou en reprendre une existante
@@ -19,10 +19,11 @@ Nous limitons cependant notre projet à 5 langues, qui sont les dernières :
 - L'Allemand
 - l'Italien
 - l'Espagnol  
+
 Toute traduction de l'application est le bienvenu ! N'hésitez-pas à ouvrir une issue et de faire une PR.
 
 ## Vous avez trouvé un bug ?
-¡Ay, caramba! 😅 
+¡Ay, caramba! 😅   
 Pas de panique, vous pouvez au choix : 
 - tenter de corriger le bug en faisant une contribution 
 - envoyer un mail à l'équipe sur [note-thing@protonmail.ch](note-thing@protonmail.ch)

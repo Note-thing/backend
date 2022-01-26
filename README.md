@@ -1,5 +1,6 @@
 # Backend
 ## Introduction
+TODO: problème + solution qu’on essaie de résoudre
 Cette application a été développée en [Ruby](https://www.ruby-lang.org/en/) et plus précisemment via le framework [Ruby on rails (RoR)](https://rubyonrails.org/).
 Le but de cette application est de fournir une API qui s'inspire de la norme RESTful permettant à [l'application frontend de Note-thing](https://github.com/Note-thing/frontend) d'accéder aux données persistantes.
 
@@ -78,15 +79,15 @@ Vous trouverez sur notre wiki les éléments suivants :
 - [notre convention de nommage](https://github.com/Note-thing/backend/wiki/Conventions-de-nommage)
 
 ## Comment contibuer ?
-Note-thing est un projet réalisé par des étudiants en ingénieurie logiciel. Nous sommes ouverts aux avis d'experts.
-Vous trouverez un [guide de contribution](CONTRIBUTING.md) qui définit quelques points clefs pour contribuer au projet.
+Note-thing est un projet réalisé par des étudiants en ingénierie logiciel. Nous sommes ouverts aux avis d'experts.
+Vous trouverez un [guide de contribution](CONTRIBUTING.md) qui définit quelques points clefs comment contribuer au projet.
 
 ### Fondateurs
 <a href="https://github.com/note-thing/backend/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=note-thing/backend" />
 </a>
 
-[Contactez-nous par email](note-thing@protonmail.ch)
+[Contactez-nous par email](mailto:note-thing@protonmail.ch)
 
 ### License
 Notre projet utilise la [License apache](LICENSE).
