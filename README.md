@@ -69,15 +69,3 @@ rake routes
 6. Assurez-vous que la pull-request passe les tests automatisés et attendez que quelqu'un donne une review
 7. Une fois que le point 6 est passé, vous pouvez merge votre pull-request dans main
 8. Youpi vous avez fait une contribution au projet
-
-## CI / CD 
-Le pipeline CI/CD se compose de deux github actions :
-
-### CI rails 
-L'actions CI rails sera exécutée automatiquement sur les branches main et test. Cette action va venir exécuter tous les tests
-à l'aide de [rspec](https://rspec.info/)
-
-### CD rails
-L'action CD rails elle est automatiquement exécutée sur la branche deploy. On peut également l'exécuter manuellement sur n'import
-quelle branche. Cette action va venir déployer sur l'infrastructure AWS la branche concernée. Elle s'occupe également de gérer
-l'arrêt et le redémarrage afin d'avoir un déploiement totalement automatique sans interaction humaine.
