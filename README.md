@@ -1,13 +1,17 @@
 # Backend
+## Introduction
+
+## Considérations techniques
 
 ## Commencer 🏁
 ### Pré-requis
 - [Docker engine](https://docs.docker.com/engine/install/) : *20.10.**
 - [Docker compose](https://docs.docker.com/compose/install/) 
   - *NOTE: docker compose est inclus dans les installation de l'engine sur Windows et MacOS*.
+- []()
 
 ### Installation
-1. Cloner le répository
+1. Cloner le repository
 ```bash
 git clone https://github.com/Note-thing/backend && cd backend
 ```
@@ -55,3 +59,25 @@ rails s
 ```bash
 rake routes
 ```
+
+## Comment contibuer ?
+1. Commencez par récupérer la dernière version du code (branche main)
+2. Ouvrir une issue expliquant ce que vous-voulez améliorer / fixer ou en reprendre une existante
+3. Créer une nouvelle branche à partir de main
+4. Faire vos changements
+5. Ouvrez une pull-request afin de merge vos changement, mentionnez la / les issues concernées
+6. Assurez-vous que la pull-request passe les tests automatisés et attendez que quelqu'un donne une review
+7. Une fois que le point 6 est passé, vous pouvez merge votre pull-request dans main
+8. Youpi vous avez fait une contribution au projet
+
+## CI / CD 
+Le pipeline CI/CD se compose de deux github actions :
+
+### CI rails 
+L'actions CI rails sera exécutée automatiquement sur les branches main et test. Cette action va venir exécuter tous les tests
+à l'aide de [rspec](https://rspec.info/)
+
+### CD rails
+L'action CD rails elle est automatiquement exécutée sur la branche deploy. On peut également l'exécuter manuellement sur n'import
+quelle branche. Cette action va venir déployer sur l'infrastructure AWS la branche concernée. Elle s'occupe également de gérer
+l'arrêt et le redémarrage afin d'avoir un déploiement totalement automatique sans interaction humaine.
