@@ -1,8 +1,15 @@
 # Backend
-## Introduction
-TODO: problème + solution qu’on essaie de résoudre
+## Contexte du projet 🧐
 Cette application a été développée en [Ruby](https://www.ruby-lang.org/en/) et plus précisemment via le framework [Ruby on rails (RoR)](https://rubyonrails.org/).
-Le but de cette application est de fournir une API qui s'inspire de la norme RESTful permettant à [l'application frontend de Note-thing](https://github.com/Note-thing/frontend) d'accéder aux données persistantes.
+Le but est de fournir une API qui s'inspire du style d'architecture RESTful permettant à [l'application frontend de Note-thing](https://github.com/Note-thing/frontend) d'accéder aux données persistantes.
+
+L'application est scindée en deux partie distinctes : 
+- le [frontent](https://github.com/Note-thing/frontend) qui représente la visualisation et l'intéraction avec les données.
+- le backend, ici même, contenant la couche métier et l'accès au SGBDR. 
+
+Ce projet a été réalisé dans le cadre d'un cours de la [HEIG-VD](https://heig-vd.ch/). Pour plus plus d'informations sur les motivations du projet et avoir une vision globale du produit, n'hésitez pas à consulter [notre Github.io](https://note-thing.github.io/) ✌️.
+
+L'application est présente à l'adresse [note-thing.ch](note-thing.ch). N'hésitez-pas à y faire un tour 😇
 
 ## Commencer 🏁
 ### Pré-requis
