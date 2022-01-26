@@ -45,7 +45,7 @@ class User < ApplicationRecord
         self.reset_password_sent_at = Time.now.utc
         self.password_digest = current_password
         # Sans validate: false, la validation de password ne fonctionne plus.. 🤔
-        save!(validate: false)
+        save(validate: false)
         token
     end
 
@@ -54,7 +54,7 @@ class User < ApplicationRecord
         token = generate_token
         self.validation_token_email = token
         self.validation_token_email_sent_at = Time.now.utc
-        save!
+        save
         token
     end
 
