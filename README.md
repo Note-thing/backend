@@ -60,6 +60,11 @@ rails s
 rake routes
 ```
 
+**Lancer les tests**
+```bash
+rails spec
+```
+
 ## Comment contibuer ?
 1. Commencez par récupérer la dernière version du code (branche main)
 2. Ouvrir une issue expliquant ce que vous-voulez améliorer / fixer ou en reprendre une existante
