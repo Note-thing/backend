@@ -6,4 +6,7 @@ class Folder < ApplicationRecord
   validates :title, length: { minimum: 1, maximum: 16}
   validates :title, presence: true
 
+  # attributs :
+  # title, created_at, updated_at, user_id
+
 end

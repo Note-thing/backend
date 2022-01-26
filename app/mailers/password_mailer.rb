@@ -2,6 +2,8 @@ class PasswordMailer < ApplicationMailer
 
   layout false
 
+  # envoie de mail de reset de password
+  # cherche par convention le template du même nom -> utilise donc views/password_mailer/new_password_email.html.erb
   def new_password_email
     @user = params[:user]
     @token = params[:token]

@@ -9,4 +9,8 @@ class SharedNote < ApplicationRecord
   def self.share_type
     %w[read_only mirror copy_content]
   end
+
+  # attributs :
+  # title, body, created_at, updated_at, note_id, uuid, sharing_type
+
 end

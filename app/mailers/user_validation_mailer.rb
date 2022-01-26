@@ -2,6 +2,8 @@ class UserValidationMailer < ApplicationMailer
 
   layout false
 
+  # envoie de mail de reset de password
+  # cherche par convention le template du même nom -> utilise donc views/user_validation_mailer/new_user_validation_email.html.erb
   def new_user_validation_email
     @user = params[:user]
     @token = params[:token]
