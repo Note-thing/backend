@@ -73,8 +73,8 @@ rails spec
 
 ## Considérations techniques
 Vous trouverez sur notre wiki les éléments suivants : 
-- [les endpoints de l'API](https://github.com/Note-thing/backend/wiki/Mod%C3%A8le-de-domaine)
-- [Les routes disponibles](https://github.com/Note-thing/backend/wiki/Routes)
+- [Modèle de domaine](https://github.com/Note-thing/backend/wiki/Mod%C3%A8le-de-domaine)
+- [les endpoints de l'API](https://github.com/Note-thing/backend/wiki/Routes)
 - [notre CI/CD](https://github.com/Note-thing/backend/wiki/CI---CD)
 - [notre convention de nommage](https://github.com/Note-thing/backend/wiki/Conventions-de-nommage)
 
