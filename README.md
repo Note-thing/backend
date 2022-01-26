@@ -78,7 +78,7 @@ Vous trouverez sur notre wiki les éléments suivants :
 - [notre CI/CD](https://github.com/Note-thing/backend/wiki/CI---CD)
 - [notre convention de nommage](https://github.com/Note-thing/backend/wiki/Conventions-de-nommage)
 
-## Comment contibuer ?
+## Comment contribuer ?
 Note-thing est un projet réalisé par des étudiants en ingénierie logiciel. Nous sommes ouverts aux avis d'experts.
 Vous trouverez un [guide de contribution](CONTRIBUTING.md) qui définit quelques points clefs comment contribuer au projet.
 
