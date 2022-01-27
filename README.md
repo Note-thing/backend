@@ -9,7 +9,7 @@ L'application est scindée en deux partie distinctes :
 
 Ce projet a été réalisé dans le cadre d'un cours de la [HEIG-VD](https://heig-vd.ch/). Pour plus plus d'informations sur les motivations du projet et avoir une vision globale du produit, n'hésitez pas à consulter [notre Github.io](https://note-thing.github.io/) ✌️.
 
-L'application est présente à l'adresse [note-thing.ch](note-thing.ch). N'hésitez-pas à y faire un tour 😇
+L'application est présente à l'adresse [note-thing.ch](https://note-thing.ch). N'hésitez-pas à y faire un tour 😇
 
 ## Commencer 🏁
 ### Pré-requis
@@ -83,6 +83,7 @@ Vous trouverez sur notre wiki les éléments suivants :
 - [Modèle de domaine](https://github.com/Note-thing/backend/wiki/Mod%C3%A8le-de-domaine)
 - [les endpoints de l'API](https://github.com/Note-thing/backend/wiki/Routes)
 - [notre CI/CD](https://github.com/Note-thing/backend/wiki/CI---CD)
+- [l'utilisation de tokens JWT](https://github.com/Note-thing/backend/wiki/JWT)
 
 ## Comment contribuer ? 🤌
 Note-thing est un projet réalisé par des étudiants en ingénierie logiciel. Nous sommes ouverts aux avis d'experts.
